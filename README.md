@@ -73,7 +73,7 @@
 
 ```
 git clone https://github.com/sergey21000/chatbot-rag.git
-cd gradio-llamacpp-chatbot
+cd chatbot-rag
 ```
 
 **2) Установка зависимостей**  
@@ -127,9 +127,10 @@ docker run -it --gpus all -p 7860:7860 \
 ### Сборка своего образа
 
 **1) Клонирование репозитория**  
-```bash
+
+```
 git clone https://github.com/sergey21000/chatbot-rag.git
-cd gradio-llamacpp-chatbot
+cd chatbot-rag
 ```
 
 **2) Сборка образа и запуск контейнера**
