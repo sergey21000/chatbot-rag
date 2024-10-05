@@ -21,7 +21,7 @@
 <div align="center">
 <a href="https://colab.research.google.com/github/sergey21000/chatbot-rag/blob/main/RAG_Chatbot_Gradio_llamacpp.ipynb"><img src="https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=0f80c1&label=%20" alt="Open in Colab"></a>
 <a href="https://huggingface.co/spaces/sergey21000/chatbot-rag"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-yellow" alt="Hugging Face Spaces"></a>
-<a href="https://hub.docker.com/r/sergey21000/hatbot-rag"><img src="https://img.shields.io/badge/Docker-Hub-blue?logo=docker" alt="Docker Hub "></a>
+<a href="https://hub.docker.com/r/sergey21000/chatbot-rag"><img src="https://img.shields.io/badge/Docker-Hub-blue?logo=docker" alt="Docker Hub "></a>
 </div>
 
 В Google Colab ноутбуке находится код приложения с комментариями
