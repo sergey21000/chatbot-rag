@@ -1,0 +1,8 @@
+FROM python:3.10
+WORKDIR /app
+COPY requirements-cpu.txt requirements-base.txt .
+RUN pip install --no-cache-dir llama_cpp_python==0.2.88
+RUN pip install --no-cache-dir -r requirements-cpu.txt
+COPY app.py config.py utils.py .
+EXPOSE 7860
+CMD ["python3", "app.py"]
