@@ -58,7 +58,7 @@
 ---
 ### Стек
 
-- [python](https://www.python.org/) >=3.8
+- [python](https://www.python.org/) >= 3.10
 - [llama-cpp-python](https://github.com/abetlen/llama-cpp-python) для инференса моделей в формате GGUF
 - [gradio](https://github.com/gradio-app/gradio) для написания веб-интерфейса
 - [langchain](https://github.com/langchain-ai/langchain) для загрузки текста из файлов, разделения текстов на фрагменты и векторного хранилища (FAISS)
@@ -76,20 +76,42 @@ git clone https://github.com/sergey21000/chatbot-rag.git
 cd chatbot-rag
 ```
 
-**2) Установка зависимостей**  
+**2) Создание и активация виртуального окружения (опционально)**
+
+Linux
+```
+python3 -m venv env
+source env/bin/activate
+```
+
+Windows
+```
+python -m venv env
+env\Scripts\activate
+```
+
+**3) Установка зависимостей**  
 
 С поддержкой CPU
 ```
 pip install -r requirements-cpu.txt
 ```
 
-С поддержкой CUDA 12.5
+С поддержкой CUDA 12.4
 ```
 pip install -r requirements-cuda.txt
 ```
+
+Для установки `llama-cpp-python` на Windows с поддержкой CUDA нужно предварительно установить [Visual Studio 2022 Community](https://visualstudio.microsoft.com/ru/downloads/) и [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit-archive), как например указано в этой [инструкции](https://github.com/abetlen/llama-cpp-python/discussions/871#discussion-5812096)  
+Для полной переустановки использовать команду
+```
+pip install --force-reinstall --no-cache-dir -r requirements.txt --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu124
+```
+
 Инструкции по установке [llama-cpp-python](https://github.com/abetlen/llama-cpp-python?tab=readme-ov-file#installation-configuration) и [torch](https://pytorch.org/get-started/locally/#start-locally) для других версий и систем
 
-**3) Запуск сервера Gradio**  
+
+**4) Запуск сервера Gradio**  
 ```
 python3 app.py
 ```
@@ -114,7 +136,7 @@ docker run -it -p 7860:7860 \
 	sergey21000/chatbot-rag:cpu
 ```
 
-*С поддержкой CUDA*
+*С поддержкой CUDA 12.5*
 ```
 docker run -it --gpus all -p 7860:7860 \
 	-v ./embed_models:/app/embed_models \
