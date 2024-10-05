@@ -2,6 +2,7 @@
 ## Gradio llama-cpp-python langchain Chatbot RAG
 
 
+---
 ### Описание
 
 Чат-бот с веб-интерфейсом на `Gradio` и механизмом RAG с использованием библиотек `llama-cpp-python` и `langchain`
@@ -24,6 +25,7 @@
 </div>
 
 В Google Colab ноутбуке находится код приложения с комментариями
+
 
 ---
 ### Функционал
@@ -51,6 +53,7 @@
 
 Установить свой шаблон промта при условии контекста можно в переменной `CONTEXT_TEMPLATE` в модуле `config.py`  
 При деплое на удаленных серверах их IP часто оказываются в черных списках YouTube, поэтому загрузка субтитров для всех видео с YouTube будет показывать статус `Invalid video url or current server IP is blocked for YouTube`. Подробнее в [обсуждении youtube-transcript-api](https://github.com/jdepoix/youtube-transcript-api/issues/303) (там же способы обхода, например через прокси)
+
 
 ---
 ### Стек
