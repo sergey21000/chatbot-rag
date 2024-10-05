@@ -266,7 +266,7 @@ def check_subtitles_available(yt_video_link: str, target_lang: str) -> Tuple[boo
             load_log += f'Subtitle language {target_lang} is not available for video {yt_video_link}\n'
             available = False
     except TranscriptsDisabled:
-        load_log += f'Invalid video url ({yt video link}) or current server IP is blocked for YouTube'
+        load_log += f'Invalid video url ({yt_video_link}) or current server IP is blocked for YouTube'
         available = False
     return available, load_log
 
