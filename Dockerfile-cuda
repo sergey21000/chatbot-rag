@@ -14,7 +14,7 @@ COPY requirements-cuda.txt requirements-base.txt .
 RUN pip install --no-cache-dir -r requirements-cuda.txt
 
 ARG CUDA_IMAGE="12.5.0-runtime-ubuntu22.04"
-FROM nvidia/cuda:${CUDA_IMAGE} 
+FROM nvidia/cuda:${CUDA_IMAGE}
 
 RUN apt-get update \
     && apt-get install -y python3 python3-pip \
