@@ -7,7 +7,7 @@
 
 Чат-бот с веб-интерфейсом на `Gradio` и механизмом RAG с использованием библиотек `llama-cpp-python` и `langchain`
 
-<a href="https://hub.docker.com/r/sergey21000/chatbot-rag/screenshots">Скриншоты</a> интерфейса приложения
+<a href="https://github.com/sergey21000/chatbot-rag/screenshots">Скриншоты</a> интерфейса приложения
 
 <div align="center">
 
