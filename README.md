@@ -10,7 +10,7 @@
 
 <div align="center">
 
-![App interface](./screenshots/chatbot_rag_query2.png)
+![App interface](./screenshots/chatbot_rag_query.png)
 </div>
 
 
