@@ -78,13 +78,13 @@ cd chatbot-rag
 
 **2) Создание и активация виртуального окружения (опционально)**
 
-Linux
+*Linux*
 ```
 python3 -m venv env
 source env/bin/activate
 ```
 
-Windows
+*Windows*
 ```
 python -m venv env
 env\Scripts\activate
@@ -92,12 +92,12 @@ env\Scripts\activate
 
 **3) Установка зависимостей**  
 
-С поддержкой CPU
+*С поддержкой CPU*
 ```
 pip install -r requirements-cpu.txt
 ```
 
-С поддержкой CUDA 12.4
+*С поддержкой CUDA 12.4*
 ```
 pip install -r requirements-cuda.txt
 ```
