@@ -54,7 +54,3 @@
 
 ![Chatbot RAG context](./load_llm_tab_select_gguf.png)
 
-
-
-<img src="./screenshots/load_models_page.png" alt="Open in Colab">
-
