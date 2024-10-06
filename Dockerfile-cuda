@@ -1,29 +1,21 @@
-ARG CUDA_IMAGE="12.5.0-devel-ubuntu22.04"
-FROM nvidia/cuda:${CUDA_IMAGE} AS builder
-
-RUN apt-get update \
-    && apt-get install -y python3 python3-pip \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+FROM pytorch/pytorch:2.4.1-cuda12.4-cudnn9-devel AS builder
 
 ENV CUDA_DOCKER_ARCH=all
 ENV GGML_CUDA=1
 ENV CMAKE_ARGS="-DGGML_CUDA=on"
 
-RUN pip install --no-cache-dir llama_cpp_python==0.2.88
-COPY requirements-base.txt requirements-cuda.txt .
-RUN pip install --no-cache-dir -r requirements-cuda.txt
+COPY requirements-base.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels llama_cpp_python==0.2.88 && \
+	pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements-base.txt
 
-ARG CUDA_IMAGE="12.5.0-runtime-ubuntu22.04"
-FROM nvidia/cuda:${CUDA_IMAGE}
-
-RUN apt-get update \
-    && apt-get install -y python3 python3-pip \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-ARG PYTHON_VERSION=3.10
-COPY --from=builder /usr/local/lib/python${PYTHON_VERSION}/dist-packages /usr/local/lib/python${PYTHON_VERSION}/dist-packages
+FROM pytorch/pytorch:2.4.1-cuda12.4-cudnn9-runtime
 
 WORKDIR /app
+
+COPY --from=builder /app/wheels /wheels
+RUN pip install --no-cache-dir /wheels/*
+
 COPY app.py config.py utils.py .
+
 EXPOSE 7860
 CMD ["python3", "app.py"]
