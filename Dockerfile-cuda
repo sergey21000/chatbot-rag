@@ -6,7 +6,7 @@ ENV CMAKE_ARGS="-DGGML_CUDA=on"
 
 COPY requirements-base.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels llama_cpp_python==0.2.88 && \
-	pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements-base.txt
+    pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements-base.txt
 
 FROM pytorch/pytorch:2.4.1-cuda12.4-cudnn9-runtime
 
