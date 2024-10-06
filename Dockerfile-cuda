@@ -10,9 +10,8 @@ ENV GGML_CUDA=1
 ENV CMAKE_ARGS="-DGGML_CUDA=on"
 
 RUN pip install --no-cache-dir llama_cpp_python==0.2.88
-RUN pip install --no-cache-dir torch==2.4.1 --extra-index-url https://download.pytorch.org/whl/cu125
-COPY requirements-base.txt .
-RUN pip install --no-cache-dir -r requirements-base.txt
+COPY requirements-base.txt requirements-cuda.txt .
+RUN pip install --no-cache-dir -r requirements-cuda.txt
 
 ARG CUDA_IMAGE="12.5.0-runtime-ubuntu22.04"
 FROM nvidia/cuda:${CUDA_IMAGE}
