@@ -89,7 +89,7 @@ def clear_documents(documents: Iterable[Document]) -> Iterable[Document]:
 
 # ------------- LLM AND EMBEDDING MODELS LOADING ------------------------
 
-# функция для загрузки файла по URL ссылке и отображением прогресс баров tqdm и gradio
+# downloading file by URL link and displaying progress bars tqdm and gradio
 def download_file(file_url: str, file_path: Union[str, Path]) -> None:
     response = requests.get(file_url, stream=True)
     if response.status_code != 200:
@@ -115,7 +115,8 @@ def load_llm_model(model_repo: str, model_file: str) -> Tuple[LLM_MODEL_DICT, st
 
     if isinstance(model_file, list):
         load_log += 'No model selected\n'
-        return llm_model, load_log
+        return {'model': llm_model}, support_system_role, load_log
+        
     if '(' in model_file:
         model_file = model_file.split('(')[0].rstrip()
 
