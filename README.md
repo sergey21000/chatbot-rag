@@ -136,7 +136,7 @@ docker run -it -p 7860:7860 \
 	sergey21000/chatbot-rag:cpu
 ```
 
-*С поддержкой CUDA 12.5*
+*С поддержкой CUDA 12.4*
 ```
 docker run -it --gpus all -p 7860:7860 \
 	-v ./embed_models:/app/embed_models \
@@ -200,5 +200,5 @@ docker run -it --gpus all -p 7860:7860 \
 
 ## Лицензия
 
-Этот проект лицензирован на условиях лицензии [MIT](./LICENSE).
+Этот проект лицензирован на условиях лицензии [MIT](./LICENSE).
 
