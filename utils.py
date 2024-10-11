@@ -34,7 +34,7 @@ from config import (
 
 
 # type annotations
-CHAT_HISTORY = List[Tuple[Optional[str], Optional[str]]]
+CHAT_HISTORY = List[Optional[Dict[str, Optional[str]]]]
 LLM_MODEL_DICT = Dict[str, Llama]
 EMBED_MODEL_DICT = Dict[str, Embeddings]
 
@@ -115,7 +115,7 @@ def load_llm_model(model_repo: str, model_file: str) -> Tuple[LLM_MODEL_DICT, st
 
     if isinstance(model_file, list):
         load_log += 'No model selected\n'
-        return {'model': llm_model}, support_system_role, load_log
+        return {'llm_model': llm_model}, support_system_role, load_log
         
     if '(' in model_file:
         model_file = model_file.split('(')[0].rstrip()
@@ -144,7 +144,7 @@ def load_llm_model(model_repo: str, model_file: str) -> Tuple[LLM_MODEL_DICT, st
         except Exception as ex:
             load_log += f'Error initializing model, error code:\n{ex}\n'
 
-    llm_model = {'model': llm_model}
+    llm_model = {'llm_model': llm_model}
     return llm_model, support_system_role, load_log
 
 
@@ -400,7 +400,7 @@ def load_documents_and_create_db(
 
 # adding a user message to the chat bot window
 def user_message_to_chatbot(user_message: str, chatbot: CHAT_HISTORY) -> Tuple[str, CHAT_HISTORY]:
-    chatbot.append([user_message, None])
+    chatbot.append({'role': 'user', 'metadata': {'title': None}, 'content': user_message})
     return '', chatbot
 
 
@@ -413,7 +413,7 @@ def update_user_message_with_context(
         score_threshold: float,
         ) -> Tuple[str, CHAT_HISTORY]:
 
-    user_message = chatbot[-1][0]
+    user_message = chatbot[-1]['content']
     user_message_with_context = ''
     if db is not None and rag_mode and user_message.strip():
         if k == 'all':
@@ -445,10 +445,23 @@ def get_llm_response(
         *generate_args,
         ) -> CHAT_HISTORY:
 
-    user_message = chatbot[-1][0]
+    llm_model = llm_model_dict.get('llm_model')
+    if model is None:
+        gr.Info('Model not initialized')
+        yield chatbot[:-1]
+        return
+        
+    gen_kwargs = dict(zip(GENERATE_KWARGS.keys(), generate_args))
+    gen_kwargs['top_k'] = int(gen_kwargs['top_k'])
+    if not do_sample:
+        gen_kwargs['top_p'] = 0.0
+        gen_kwargs['top_k'] = 1
+        gen_kwargs['repeat_penalty'] = 1.0
+        
+    user_message = chatbot[-1]['content']
     if not user_message.strip():
         yield chatbot[:-1]
-        return None
+        return
 
     if rag_mode:
         if user_message_with_context:
@@ -459,38 +472,29 @@ def get_llm_response(
                 f'Try reducing searh_score_threshold or disable RAG mode for normal generation'
                 ))
             yield chatbot[:-1]
-            return None
-
-    llm_model = llm_model_dict.get('model')
-    gen_kwargs = dict(zip(GENERATE_KWARGS.keys(), generate_args))
-    gen_kwargs['top_k'] = int(gen_kwargs['top_k'])
-    if not do_sample:
-        gen_kwargs['top_p'] = 0.0
-        gen_kwargs['top_k'] = 1
-        gen_kwargs['repeat_penalty'] = 1.0
+            return
 
     messages = []
     if support_system_role and system_prompt:
-        messages.append({'role': 'system', 'content': system_prompt})
+        messages.append({'role': 'system', 'metadata': {'title': None}, 'content': system_prompt})
 
     if history_len != 0:
-        for user_msg, bot_msg in chatbot[:-1][-history_len:]:
-            messages.append({'role': 'user', 'content': user_msg})
-            messages.append({'role': 'assistant', 'content': bot_msg})
+        messages.extend(chatbot[:-1][-(history_len*2):])
 
-    messages.append({'role': 'user', 'content': user_message})
+    messages.append({'role': 'user', 'metadata': {'title': None}, 'content': user_message})
     stream_response = llm_model.create_chat_completion(
         messages=messages,
         stream=True,
         **gen_kwargs,
         )
     try:
-        chatbot[-1][1] = ''
+        chatbot.append({'role': 'assistant', 'metadata': {'title': None}, 'content': ''})
         for chunk in stream_response:
             token = chunk['choices'][0]['delta'].get('content')
             if token is not None:
-                chatbot[-1][1] += token
+                chatbot[-1]['content'] += token
                 yield chatbot
     except Exception as ex:
         gr.Info(f'Error generating response, error code: {ex}')
-        yield chatbot
+        yield chatbot[:-1]
+        return
