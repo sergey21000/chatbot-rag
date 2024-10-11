@@ -446,7 +446,7 @@ def get_llm_response(
         ) -> CHAT_HISTORY:
 
     llm_model = llm_model_dict.get('llm_model')
-    if model is None:
+    if llm_model is None:
         gr.Info('Model not initialized')
         yield chatbot[:-1]
         return
