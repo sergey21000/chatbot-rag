@@ -118,6 +118,7 @@ with gr.Blocks(theme=theme, css=css) as interface:
         with gr.Row():
             with gr.Column(scale=3):
                 chatbot = gr.Chatbot(
+                    type='messages',  # new in gradio 5+
                     show_copy_button=True,
                     bubble_full_width=False,
                     height=480,
