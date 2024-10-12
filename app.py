@@ -89,15 +89,9 @@ start_embed_model, load_log = load_embed_model(EMBED_MODEL_REPOS[0])
 
 # ================== APPLICATION WEB INTERFACE ============================
 
-theme = gr.themes.Base(primary_hue='green', secondary_hue='yellow', neutral_hue='zinc').set(
-    loader_color='rgb(0, 255, 0)',
-    slider_color='rgb(0, 200, 0)',
-    body_text_color_dark='rgb(0, 200, 0)',
-    button_secondary_background_fill_dark='green',
-)
 css = '''.gradio-container {width: 60% !important}'''
 
-with gr.Blocks(theme=theme, css=css) as interface:
+with gr.Blocks(css=css) as interface:
 
     # ==================== GRADIO STATES ===============================
 
