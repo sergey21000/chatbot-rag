@@ -76,7 +76,7 @@
 - [python](https://www.python.org/) >= 3.10
 - [llama-cpp-python](https://github.com/abetlen/llama-cpp-python) для инференса моделей в формате GGUF
 - [gradio](https://github.com/gradio-app/gradio) для написания веб-интерфейса
-- [langchain](https://github.com/langchain-ai/langchain) для загрузки текста из файлов, разделения текстов на фрагменты и векторного хранилища (FAISS)
+- [langchain](https://github.com/langchain-ai/langchain) для загрузки текстовых файлов, разделения текстов на фрагменты и векторного хранилища (FAISS)
 - [LLM Модель](https://huggingface.co/bartowski/gemma-2-2b-it-GGUF) `gemma-2-2b-it-Q8_0.gguf` в качестве языковой модели по умолчанию
 - [Embedding Модель](https://huggingface.co/sergeyzh/rubert-tiny-turbo) `sergeyzh/rubert-tiny-turbo` в качестве Embedding модели по умолчанию
 
