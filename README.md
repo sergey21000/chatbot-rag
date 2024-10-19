@@ -15,7 +15,7 @@
 <details>
 <summary>Скриншот главной страницы приложения</summary>
 
-![Главная страница](./screenshots/chatbot_rag_query.png)
+![Главная страница](./screenshots/screenshots/chatbot_rag_query.png)
 </details>
 
 <a href="https://github.com/sergey21000/chatbot-rag/tree/main/screenshots">Скриншоты</a> интерфейса приложения
