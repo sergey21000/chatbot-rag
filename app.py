@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Tuple, Optional
 
 import gradio as gr
 from langchain_core.vectorstores import VectorStore
@@ -8,6 +8,7 @@ from config import (
     EMBED_MODEL_REPOS,
     SUBTITLES_LANGUAGES,
     GENERATE_KWARGS,
+    CONTEXT_TEMPLATE,
 )
 
 from utils import (
@@ -27,7 +28,17 @@ from utils import (
 
 # ============ INTERFACE COMPONENT INITIALIZATION FUNCS ============
 
-def get_rag_settings(rag_mode: bool, render: bool = True):
+def get_rag_mode_component(db: Optional[VectorStore]) -> gr.Checkbox:
+    value = visible = db is not None
+    return gr.Checkbox(value=value, label='RAG Mode', scale=1, visible=visible)
+    
+    
+def get_rag_settings(
+    rag_mode: bool, 
+    context_template_value: str, 
+    render: bool = True,
+    ) -> Tuple[gr.component, ...]:
+
     k = gr.Radio(
         choices=[1, 2, 3, 4, 5, 'all'],
         value=2,
@@ -44,7 +55,14 @@ def get_rag_settings(rag_mode: bool, render: bool = True):
         visible=rag_mode,
         render=render,
         )
-    return k, score_threshold
+    context_template = gr.Textbox(
+        value=context_template_value,
+        label='Context Template',
+        lines=len(context_template_value.split('\n')),
+        visible=rag_mode,
+        render=render,
+    )
+    return k, score_threshold, context_template
 
 
 def get_user_message_with_context(text: str, rag_mode: bool) -> gr.component:
@@ -73,12 +91,7 @@ def get_generate_args(do_sample: bool) -> List[gr.component]:
         gr.Slider(minimum=1, maximum=5, value=GENERATE_KWARGS['repeat_penalty'], step=0.1, label='repeat_penalty', visible=do_sample),
     ]
     return generate_args
-
-
-def get_rag_mode_component(db: Optional[VectorStore]) -> gr.Checkbox:
-    value = visible = db is not None
-    return gr.Checkbox(value=value, label='RAG Mode', scale=1, visible=visible)
-
+    
 
 # ================ LOADING AND INITIALIZING MODELS ========================
 
@@ -155,12 +168,17 @@ with gr.Blocks(css=css) as interface:
                             )
 
         rag_mode = get_rag_mode_component(db=db.value)
-        k, score_threshold = get_rag_settings(rag_mode=rag_mode.value, render=False)
+        k, score_threshold, context_template = get_rag_settings(
+            rag_mode=rag_mode.value,
+            context_template_value=CONTEXT_TEMPLATE,
+            render=False,
+            )
         rag_mode.change(
             fn=get_rag_settings,
-            inputs=[rag_mode],
-            outputs=[k, score_threshold],
+            inputs=[rag_mode, context_template],
+            outputs=[k, score_threshold, context_template],
             )
+
         with gr.Row():
             k.render()
             score_threshold.render()
@@ -169,6 +187,7 @@ with gr.Blocks(css=css) as interface:
 
         with gr.Accordion('Prompt', open=True):
             system_prompt = get_system_prompt_component(interactive=support_system_role.value)
+            context_template.render()
             user_message_with_context = get_user_message_with_context(text='', rag_mode=rag_mode.value)
 
         # ---------------- SEND, CLEAR AND STOP BUTTONS ------------
@@ -181,7 +200,7 @@ with gr.Blocks(css=css) as interface:
             queue=False,
         ).then(
             fn=update_user_message_with_context,
-            inputs=[chatbot, rag_mode, db, k, score_threshold],
+            inputs=[chatbot, rag_mode, db, k, score_threshold, context_template],
             outputs=[user_message_with_context],
         ).then(
             fn=get_user_message_with_context,
@@ -314,7 +333,6 @@ with gr.Blocks(css=css) as interface:
             fn=load_llm_model,
             inputs=[curr_llm_model_repo, curr_llm_model_path],
             outputs=[llm_model, support_system_role, load_llm_model_log],
-            queue=True,
         ).success(
             fn=lambda log: log + get_memory_usage(),
             inputs=[load_llm_model_log],

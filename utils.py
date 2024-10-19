@@ -29,7 +29,6 @@ from config import (
     EMBED_MODELS_PATH,
     GENERATE_KWARGS,
     LOADER_CLASSES,
-    CONTEXT_TEMPLATE,
 )
 
 
@@ -411,10 +410,16 @@ def update_user_message_with_context(
         db: VectorStore,
         k: Union[int, str],
         score_threshold: float,
+        context_template: str,
         ) -> Tuple[str, CHAT_HISTORY]:
 
     user_message = chatbot[-1]['content']
     user_message_with_context = ''
+
+    if '{user_message}' not in context_template and '{context}' not  in context_template:
+        gr.Info('Context template must include {user_message} and {context}')
+        return user_message_with_context
+        
     if db is not None and rag_mode and user_message.strip():
         if k == 'all':
             k = len(db.docstore._dict)
@@ -425,7 +430,7 @@ def update_user_message_with_context(
             )
         if len(docs_and_distances) > 0:
             retriever_context = '\n\n'.join([doc[0].page_content for doc in docs_and_distances])
-            user_message_with_context = CONTEXT_TEMPLATE.format(
+            user_message_with_context = context_template.format(
                 user_message=user_message,
                 context=retriever_context,
                 )
@@ -450,7 +455,7 @@ def get_llm_response(
         gr.Info('Model not initialized')
         yield chatbot[:-1]
         return
-        
+
     gen_kwargs = dict(zip(GENERATE_KWARGS.keys(), generate_args))
     gen_kwargs['top_k'] = int(gen_kwargs['top_k'])
     if not do_sample:
@@ -468,8 +473,9 @@ def get_llm_response(
             user_message = user_message_with_context
         else:
             gr.Info((
-                f'No documents relevant to the query were found, generation in RAG mode is not possible.\n'
-                f'Try reducing searh_score_threshold or disable RAG mode for normal generation'
+                'No documents relevant to the query were found, generation in RAG mode is not possible.\n'
+                'Or Context template is specified incorrectly.\n'
+                'Try reducing searh_score_threshold or disable RAG mode for normal generation'
                 ))
             yield chatbot[:-1]
             return
