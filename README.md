@@ -76,7 +76,6 @@
 - [Embedding Модель](https://huggingface.co/sergeyzh/rubert-tiny-turbo) `sergeyzh/rubert-tiny-turbo` в качестве Embedding модели по умолчанию
 
 Работоспособность приложения проверялась на Ubuntu 22.04 (python 3.10) и Windows 10 (python 3.12)
-
 
 ---
 ## 🐍 Установка и запуск через Python
