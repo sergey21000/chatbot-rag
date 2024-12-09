@@ -1,9 +1,4 @@
 
-<div align="right">
-
-**Русский** | [English](./README.en.md)
-</div>
-
 
 ---
 # RAG Chatbot with Gradio, llama-cpp-python, and Langchain
