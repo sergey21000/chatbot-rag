@@ -12,7 +12,7 @@
 
 Чат-бот на `llama-cpp-python` и `langchain` с веб-интерфейсом на `Gradio`, использующий механизм RAG для эффективного поиска и генерации ответов
 
-В Google Colab <a href="https://colab.research.google.com/github/sergey21000/chatbot-rag/blob/main/RAG_Chatbot_Gradio_llamacpp.ipynb"><img src="https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=0f80c1&label=%20" alt="Open in Colab"></a> ноутбуке находится код приложения с комментариями
+В Google Colab <a href="https://colab.research.google.com/drive/1ZckPUFlRykskJKF5OzwiX82PFcRKNN23"><img src="https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=0f80c1&label=%20" alt="Open in Colab"></a> ноутбуке находится код приложения с комментариями
 
 <details>
 <summary>Скриншот главной страницы приложения</summary>
