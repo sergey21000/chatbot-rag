@@ -126,7 +126,7 @@ cd chatbot-rag
   ```
   CMAKE_ARGS="-DGGML_CUDA=on pip install -r requirements-cuda.txt
   ```
-  Windows
+  Windows CMD
   ```
   set FORCE_CMAKE=1 && set CMAKE_ARGS=-DGGML_CUDA=on -DLLAMA_AVX=off -DLLAMA_AVX2=off -DLLAMA_FMA=off
   pip install -r requirements-cuda.txt
