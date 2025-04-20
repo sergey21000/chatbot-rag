@@ -116,21 +116,21 @@ cd chatbot-rag
 
 **3) Установка зависимостей**  
 
- - *С поддержкой CPU*
+- *С поддержкой CPU*
   ```
   pip install -r requirements-cpu.txt
   ```
 
- - *С поддержкой CUDA 12.6*
-  Linux
-  ```
-  CMAKE_ARGS="-DGGML_CUDA=on pip install -r requirements-cuda.txt
-  ```
-  Windows CMD
-  ```
-  set FORCE_CMAKE=1 && set CMAKE_ARGS=-DGGML_CUDA=on -DLLAMA_AVX=off -DLLAMA_AVX2=off -DLLAMA_FMA=off
-  pip install -r requirements-cuda.txt
-  ```
+- *С поддержкой CUDA 12.6*
+  - Linux
+    ```
+    CMAKE_ARGS="-DGGML_CUDA=on pip install -r requirements-cuda.txt
+    ```
+  - Windows CMD
+    ```
+    set FORCE_CMAKE=1 && set CMAKE_ARGS=-DGGML_CUDA=on -DLLAMA_AVX=off -DLLAMA_AVX2=off -DLLAMA_FMA=off
+    pip install -r requirements-cuda.txt
+    ```
 
 Для установки `llama-cpp-python` на Windows с поддержкой CUDA нужно предварительно установить [Visual Studio 2022 Community](https://visualstudio.microsoft.com/ru/downloads/) и [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit-archive), как например указано в этой [инструкции](https://github.com/abetlen/llama-cpp-python/discussions/871#discussion-5812096)  
 
@@ -200,7 +200,7 @@ cd chatbot-rag
   ```
 
 - *С поддержкой CUDA*
-	
+
   Сборка образа
   - Сборка образа на основе образа Nvidia
   ```
