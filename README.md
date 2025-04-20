@@ -79,8 +79,8 @@
 - [llama-cpp-python](https://github.com/abetlen/llama-cpp-python) для инференса моделей в формате GGUF
 - [gradio](https://github.com/gradio-app/gradio) для написания веб-интерфейса
 - [langchain](https://github.com/langchain-ai/langchain) для загрузки текстовых файлов, разделения текстов на фрагменты и векторного хранилища (FAISS)
-- [LLM Модель](https://huggingface.co/bartowski/gemma-2-2b-it-GGUF) `gemma-2-2b-it-Q8_0.gguf` в качестве языковой модели по умолчанию
-- [Embedding Модель](https://huggingface.co/sergeyzh/rubert-tiny-turbo) `sergeyzh/rubert-tiny-turbo` в качестве Embedding модели по умолчанию
+- [Модель gemma-3-1b](https://huggingface.co/bartowski/google_gemma-3-1b-it-GGUF) `google_gemma-3-1b-it-Q8_0.gguf` в формате GGUF в качестве LLM модели по умолчанию
+- [Embedding Модель](https://huggingface.co/Alibaba-NLP/gte-multilingual-base) `Alibaba-NLP/gte-multilingual-base` в качестве Embedding модели по умолчанию
 
 Работоспособность приложения проверялась на Ubuntu 22.04 (python 3.10) и Windows 10 (python 3.12)
 
