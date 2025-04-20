@@ -121,7 +121,7 @@ cd chatbot-rag
   pip install -r requirements-cpu.txt
   ```
 
-- *С поддержкой CUDA 12.6*
+- *С поддержкой CUDA*
   - Linux
     ```
     CMAKE_ARGS="-DGGML_CUDA=on pip install -r requirements-cuda.txt
