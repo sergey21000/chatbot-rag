@@ -1,5 +1,5 @@
---extra-index-url https://download.pytorch.org/whl/cu124
+--extra-index-url https://download.pytorch.org/whl/cu126
 --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu124
-torch==2.4.1
-llama_cpp_python==0.2.90
+torch==2.6.0
+llama_cpp_python==0.3.8
 -r requirements-base.txt

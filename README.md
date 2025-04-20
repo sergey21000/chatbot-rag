@@ -121,16 +121,18 @@ cd chatbot-rag
   pip install -r requirements-cpu.txt
   ```
 
- - *С поддержкой CUDA 12.4*
+ - *С поддержкой CUDA 12.6*
+  Linux
   ```
+  CMAKE_ARGS="-DGGML_CUDA=on pip install -r requirements-cuda.txt
+  ```
+  Windows
+  ```
+  set FORCE_CMAKE=1 && set CMAKE_ARGS=-DGGML_CUDA=on -DLLAMA_AVX=off -DLLAMA_AVX2=off -DLLAMA_FMA=off
   pip install -r requirements-cuda.txt
   ```
 
 Для установки `llama-cpp-python` на Windows с поддержкой CUDA нужно предварительно установить [Visual Studio 2022 Community](https://visualstudio.microsoft.com/ru/downloads/) и [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit-archive), как например указано в этой [инструкции](https://github.com/abetlen/llama-cpp-python/discussions/871#discussion-5812096)  
-Для полной переустановки использовать команду
-```
-pip install --force-reinstall --no-cache-dir -r requirements.txt --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu124
-```
 
 Инструкции по установке [llama-cpp-python](https://github.com/abetlen/llama-cpp-python?tab=readme-ov-file#installation-configuration) и [torch](https://pytorch.org/get-started/locally/#start-locally) для других версий и систем
 
@@ -156,17 +158,19 @@ python3 app.py
 	-v ./embed_models:/app/embed_models \
 	-v ./models:/app/models \
 	--name chatbot-rag \
-	sergey21000/chatbot-rag:cpu
+	sergey21000/chatbot-rag:cpu-v1.0
   ```
 
-- *С поддержкой CUDA 12.4*
+- *С поддержкой CUDA 12.6*
   ```
   docker run -it --gpus all -p 7860:7860 \
 	-v ./embed_models:/app/embed_models \
 	-v ./models:/app/models \
 	--name chatbot-rag \
-	sergey21000/chatbot-rag:cuda
+	sergey21000/chatbot-rag:pytorch2.6.0-cuda12.6-v1.0
   ```
+
+Для проброса своего конфига в контейнер добавить `-v ./config.py:/app/config.py`
 
 
 ### 🏗 Сборка своего образа и запуск контейнера
@@ -184,7 +188,7 @@ cd chatbot-rag
 
   Сборка образа
   ```
-  docker build -t chatbot-rag:cpu -f Dockerfile-cpu .
+  docker build -t chatbot-rag:cpu-v1.0 -f Dockerfile-cpu .
   ```
   Запуск контейнера
   ```
@@ -192,14 +196,19 @@ cd chatbot-rag
 	-v ./embed_models:/app/embed_models \
 	-v ./models:/app/models \
 	--name chatbot-rag \
-	chatbot-rag:cpu
+	chatbot-rag:cpu-v1.0
   ```
 
 - *С поддержкой CUDA*
-
+	
   Сборка образа
+  - Сборка образа на основе образа Nvidia
   ```
-  docker build -t chatbot-rag:cuda -f Dockerfile-cuda .
+  docker build -t chatbot-rag:nvidia-cuda12.5-v1.0 -f Dockerfile-cuda-nvidia .
+  ```
+  - Сборка образа на основе образа Pytorch
+  ```
+  docker build -t chatbot-rag:pytorch2.6.0-cuda12.6-v1.0 -f Dockerfile-cuda-pytorch .
   ```
   Запуск контейнера
   ```
@@ -207,11 +216,13 @@ cd chatbot-rag
 	-v ./embed_models:/app/embed_models \
 	-v ./models:/app/models \
 	--name chatbot-rag \
-	chatbot-rag:cuda
+	chatbot-rag:pytorch2.6.0-cuda12.6-v1.0
   ```
 
 После запуска сервера перейти в браузере по адресу http://localhost:7860/  
 Приложение будет доступно через некоторое время (после первоначальной загрузки моделей)
+
+Для проброса своего конфига в контейнер добавить `-v ./config.py:/app/config.py`
 
 ---
 

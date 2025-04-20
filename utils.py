@@ -4,6 +4,8 @@ from shutil import rmtree
 from typing import List, Tuple, Dict, Union, Optional, Any, Iterable
 from tqdm import tqdm
 
+from llama_cpp import Llama
+
 import psutil
 import requests
 from requests.exceptions import MissingSchema
@@ -11,7 +13,6 @@ from requests.exceptions import MissingSchema
 import torch
 import gradio as gr
 
-from llama_cpp import Llama
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled
 from huggingface_hub import hf_hub_download, list_repo_tree, list_repo_files, repo_info, repo_exists, snapshot_download
 
@@ -28,7 +29,9 @@ from config import (
     LLM_MODELS_PATH,
     EMBED_MODELS_PATH,
     GENERATE_KWARGS,
+    LLAMA_MODEL_KWARGS,
     LOADER_CLASSES,
+    EMBED_MODEL_DEVICE,
 )
 
 
@@ -132,12 +135,12 @@ def load_llm_model(model_repo: str, model_file: str) -> Tuple[LLM_MODEL_DICT, st
             load_log += f'Model {model_file} loaded\n'
         except Exception as ex:
             model_path = ''
-            load_log += f'Error loading model, error code:\n{ex}\n'
+            load_log += f'Error downloading model, error code:\n{ex}\n'
 
     if model_path:
         progress(0.7, desc='Step 2/2: Initialize the model')
         try:
-            llm_model = Llama(model_path=str(model_path), n_gpu_layers=-1, verbose=False)
+            llm_model = Llama(model_path=str(model_path), **LLAMA_MODEL_KWARGS)
             support_system_role = 'System role not supported' not in llm_model.metadata['tokenizer.chat_template']
             load_log += f'Model {model_file} initialized, max context size is {llm_model.n_ctx()} tokens\n'
         except Exception as ex:
@@ -171,7 +174,10 @@ def load_embed_model(model_repo: str) -> Tuple[Dict[str, HuggingFaceEmbeddings],
         load_log += f'Model {model_repo} loaded\n'
 
     progress(0.7, desc='Шаг 2/2: Инициализация модели')
-    model_kwargs = {'device': 'cuda' if torch.cuda.is_available() else 'cpu'}
+    model_kwargs = dict(
+        device=EMBED_MODEL_DEVICE,
+        trust_remote_code=True,
+    )
     embed_model = HuggingFaceEmbeddings(
         model_name=str(folder_path), 
         model_kwargs=model_kwargs,
@@ -399,7 +405,8 @@ def load_documents_and_create_db(
 
 # adding a user message to the chat bot window
 def user_message_to_chatbot(user_message: str, chatbot: CHAT_HISTORY) -> Tuple[str, CHAT_HISTORY]:
-    chatbot.append({'role': 'user', 'metadata': {'title': None}, 'content': user_message})
+    # chatbot.append({'role': 'user', 'metadata': {'title': None}, 'content': user_message})
+    chatbot.append({'role': 'user', 'content': user_message})
     return '', chatbot
 
 
@@ -412,7 +419,7 @@ def update_user_message_with_context(
         score_threshold: float,
         context_template: str,
         ) -> Tuple[str, CHAT_HISTORY]:
-
+    
     user_message = chatbot[-1]['content']
     user_message_with_context = ''
 
@@ -482,19 +489,19 @@ def get_llm_response(
 
     messages = []
     if support_system_role and system_prompt:
-        messages.append({'role': 'system', 'metadata': {'title': None}, 'content': system_prompt})
+        messages.append({'role': 'system', 'content': system_prompt})
 
     if history_len != 0:
         messages.extend(chatbot[:-1][-(history_len*2):])
 
-    messages.append({'role': 'user', 'metadata': {'title': None}, 'content': user_message})
+    messages.append({'role': 'user', 'content': user_message})
     stream_response = llm_model.create_chat_completion(
         messages=messages,
         stream=True,
         **gen_kwargs,
         )
     try:
-        chatbot.append({'role': 'assistant', 'metadata': {'title': None}, 'content': ''})
+        chatbot.append({'role': 'assistant', 'content': ''})
         for chunk in stream_response:
             token = chunk['choices'][0]['delta'].get('content')
             if token is not None:

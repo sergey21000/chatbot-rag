@@ -1,10 +1,15 @@
 from typing import List, Tuple, Optional
 
+# this is so that there is no error: exception: access violation reading 0x0000000000000000
+# https://github.com/abetlen/llama-cpp-python/issues/1581
+from llama_cpp import Llama
+
 import gradio as gr
 from langchain_core.vectorstores import VectorStore
 
 from config import (
     LLM_MODEL_REPOS,
+    START_LLM_MODEL_FILE,
     EMBED_MODEL_REPOS,
     SUBTITLES_LANGUAGES,
     GENERATE_KWARGS,
@@ -95,14 +100,31 @@ def get_generate_args(do_sample: bool) -> List[gr.component]:
 
 # ================ LOADING AND INITIALIZING MODELS ========================
 
-start_llm_model, start_support_system_role, load_log = load_llm_model(LLM_MODEL_REPOS[0], 'gemma-2-2b-it-Q8_0.gguf')
-start_embed_model, load_log = load_embed_model(EMBED_MODEL_REPOS[0])
+start_llm_model, start_support_system_role, load_log = load_llm_model(
+    model_repo=LLM_MODEL_REPOS[0],
+    model_file=START_LLM_MODEL_FILE,
+)
 
+if start_llm_model['llm_model'] is None:
+    raise Exception(f'LLM model not initialized, status message: {load_log}')
+
+
+start_embed_model, load_log = load_embed_model(
+    model_repo=EMBED_MODEL_REPOS[0],
+)
+
+if start_embed_model['embed_model'] is None:
+    raise Exception(f'Embed model not initialized, status message: {load_log}')
 
 
 # ================== APPLICATION WEB INTERFACE ============================
 
-css = '''.gradio-container {width: 60% !important}'''
+css = '''
+.gradio-container {
+    width: 70% !important;
+    margin: 0 auto !important;
+}
+'''
 
 with gr.Blocks(css=css) as interface:
 
@@ -127,7 +149,6 @@ with gr.Blocks(css=css) as interface:
                 chatbot = gr.Chatbot(
                     type='messages',  # new in gradio 5+
                     show_copy_button=True,
-                    bubble_full_width=False,
                     height=480,
                 )
                 user_message = gr.Textbox(label='User')
@@ -197,7 +218,7 @@ with gr.Blocks(css=css) as interface:
             fn=user_message_to_chatbot,
             inputs=[user_message, chatbot],
             outputs=[user_message, chatbot],
-            queue=False,
+            # queue=False,
         ).then(
             fn=update_user_message_with_context,
             inputs=[chatbot, rag_mode, db, k, score_threshold, context_template],
