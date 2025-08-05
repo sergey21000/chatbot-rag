@@ -89,7 +89,7 @@
 
 **1) Клонирование репозитория**  
 
-```
+```sh
 git clone https://github.com/sergey21000/chatbot-rag.git
 cd chatbot-rag
 ```
@@ -97,19 +97,19 @@ cd chatbot-rag
 **2) Создание и активация виртуального окружения (опционально)**
 
 - *Linux*
-  ```
+  ```sh
   python3 -m venv env
   source env/bin/activate
   ```
 
 - *Windows CMD*
-  ```
+  ```sh
   python -m venv env
   env\Scripts\activate
   ```
 
 - *Windows PowerShell*
-  ```
+  ```powershell
   python -m venv env
   env\Scripts\activate.ps1
   ```
@@ -117,17 +117,17 @@ cd chatbot-rag
 **3) Установка зависимостей**  
 
 - *С поддержкой CPU*
-  ```
+  ```sh
   pip install -r requirements-cpu.txt
   ```
 
 - *С поддержкой CUDA*
   - Linux
-    ```
+    ```sh
     CMAKE_ARGS="-DGGML_CUDA=on pip install -r requirements-cuda.txt
     ```
   - Windows CMD
-    ```
+    ```sh
     set CMAKE_ARGS=-DGGML_CUDA=on
     pip install -r requirements-cuda.txt
     ```
@@ -140,7 +140,7 @@ cd chatbot-rag
 
 
 **4) Запуск сервера Gradio**  
-```
+```sh
 python3 app.py
 ```
 После запуска сервера перейти в браузере по адресу http://localhost:7860/  
@@ -156,7 +156,7 @@ python3 app.py
 ### 🏃‍ Запуск контейнера из образа Docker HUB
 
 - *С поддержкой CPU*
-  ```
+  ```sh
   docker run -it -p 7860:7860 \
 	-v ./embed_models:/app/embed_models \
 	-v ./models:/app/models \
@@ -165,7 +165,7 @@ python3 app.py
   ```
 
 - *С поддержкой CUDA 12.6*
-  ```
+  ```sh
   docker run -it --gpus all -p 7860:7860 \
 	-v ./embed_models:/app/embed_models \
 	-v ./models:/app/models \
@@ -180,7 +180,7 @@ python3 app.py
 
 **1) Клонирование репозитория**  
 
-```
+```sh
 git clone https://github.com/sergey21000/chatbot-rag.git
 cd chatbot-rag
 ```
@@ -190,11 +190,11 @@ cd chatbot-rag
 - *С поддержкой CPU*
 
   Сборка образа
-  ```
+  ```sh
   docker build -t chatbot-rag:cpu-v1.0 -f Dockerfile-cpu .
   ```
   Запуск контейнера
-  ```
+  ```sh
   docker run -it -p 7860:7860 \
 	-v ./embed_models:/app/embed_models \
 	-v ./models:/app/models \
@@ -206,11 +206,11 @@ cd chatbot-rag
 
   Сборка образа
   - Сборка образа на основе образа Nvidia
-  ```
+  ```sh
   docker build -t chatbot-rag:nvidia-cuda12.5-v1.0 -f Dockerfile-cuda-nvidia .
   ```
   - Сборка образа на основе образа Pytorch
-  ```
+  ```sh
   docker build -t chatbot-rag:pytorch2.6.0-cuda12.6-v1.0 -f Dockerfile-cuda-pytorch .
   ```
   Запуск контейнера
