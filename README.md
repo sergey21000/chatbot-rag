@@ -3,10 +3,9 @@
 ---
 # RAG Chatbot with Gradio, llama-cpp-python, and Langchain
 
-<div align="center">
+<div align="left">
 
 <a href="https://huggingface.co/spaces/sergey21000/chatbot-rag"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-yellow" alt="Hugging Face Spaces"></a>
-<a href="https://hub.docker.com/r/sergey21000/chatbot-rag"><img src="https://img.shields.io/badge/Docker-Hub-blue?logo=docker" alt="Docker Hub "></a>
 </div>
 
 
@@ -241,4 +240,5 @@ cd chatbot-rag
 ## Лицензия
 
 Этот проект лицензирован на условиях лицензии [MIT](./LICENSE).
+
 
