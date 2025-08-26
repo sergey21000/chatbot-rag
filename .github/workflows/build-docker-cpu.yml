@@ -31,5 +31,5 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
-            ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cpu-${{ github.sha }}
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cpu
+            ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cpu-${{ github.sha }}
