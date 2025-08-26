@@ -1,4 +1,4 @@
-name: Build and Push Docker (CUDA only)
+name: Build and Push Docker (CUDA Image with Wheels Extraction)
 
 on: workflow_dispatch
 
@@ -7,11 +7,43 @@ permissions:
   packages: write
 
 jobs:
-  docker-cuda:
+  build-wheels:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and extract wheels (no image push)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile-cuda-nvidia-builder
+          push: false
+          platforms: linux/amd64
+          target: export-wheels
+          outputs: type=local,dest=./wheels-out
+
+      - name: Upload wheels artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-wheels
+          path: ./wheels-out/wheels/
+
+  build-final:
+    runs-on: ubuntu-24.04
+    needs: build-wheels
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download wheels artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: python-wheels
+          path: ./wheels/
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -23,15 +55,12 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push CUDA image
+      - name: Build and push final image
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile-cuda-nvidia
+          file: Dockerfile-cuda-nvidia-final
           push: true
-          pull: true
           platforms: linux/amd64
           tags: |
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda
-          build-args: |
-            BUILDKIT_INLINE_CACHE=1
