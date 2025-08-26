@@ -36,6 +36,13 @@ jobs:
     runs-on: ubuntu-24.04
     needs: build-wheels
     steps:
+      - name: Clean up disk space before build
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          docker system prune -af || true
+  
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -64,6 +71,7 @@ jobs:
           platforms: linux/amd64
           tags: |
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda
+
 
 
 
