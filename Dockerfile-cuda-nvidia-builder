@@ -13,5 +13,5 @@ WORKDIR /app
 COPY requirements-base.txt requirements-cuda.txt .
 
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels \
-    -r requirements-base.txt $(grep -v '^torch' requirements-cuda.txt | tr -d '\r') \
+    -r requirements-cuda.txt \
     && rm -rf /root/.cache/pip
