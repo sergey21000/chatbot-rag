@@ -66,7 +66,7 @@ jobs:
           context: .
           file: Dockerfile-cuda-nvidia-final
           push: true
-          # pull: true
+          pull: true
           platforms: linux/amd64
           tags: |
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda
