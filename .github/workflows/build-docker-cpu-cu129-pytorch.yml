@@ -12,8 +12,6 @@ on:
           - both
           - cuda
           - cpu
-  push:
-    branches: [main, legacy-langchain-v0.2]
 
 permissions:
   contents: write
