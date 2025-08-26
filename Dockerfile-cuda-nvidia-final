@@ -1,5 +1,5 @@
 ARG BUILDER_TAG
-FROM ghcr.io/sergey21000/chatbot-rag:${BUILDER_TAG} as builder
+FROM ghcr.io/sergey21000/chatbot-rag:${BUILDER_TAG} AS builder
 
 ARG CUDA_IMAGE=12.9.1-runtime-ubuntu24.04
 FROM nvcr.io/nvidia/cuda:${CUDA_IMAGE}
