@@ -37,8 +37,10 @@ jobs:
           tags: |
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-builder-cuda
           # build-args: |
-            # BUILDER_TAG=${{ github.ref_name }}-builder-cuda
             # BUILDKIT_INLINE_CACHE=1
+
+      - name: Check disk usage
+        run: df -h
 
   build-and-push-final:
     runs-on: ubuntu-24.04
@@ -73,3 +75,6 @@ jobs:
           build-args: |
             BUILDER_TAG=${{ github.ref_name }}-builder-cuda
             # BUILDKIT_INLINE_CACHE=1
+
+      - name: Check disk usage
+        run: df -h
