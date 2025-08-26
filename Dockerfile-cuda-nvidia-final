@@ -11,12 +11,9 @@ RUN pip install --no-cache-dir --break-system-packages /wheels/* \
     && rm -rf /wheels /root/.cache/pip
 
 WORKDIR /app
-COPY app.py config.py utils.py .
+COPY app.py config.py utils.py ./
 
 ENV GRADIO_SERVER_NAME=0.0.0.0
 EXPOSE 7860
 
 CMD ["python3", "app.py"]
-
-
-
