@@ -1,0 +1,37 @@
+name: Test Runner
+
+on: workflow_dispatch
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  docker-cuda:
+    runs-on: ubuntu-24.04
+    steps:
+    
+      - name: Clean up disk space before build
+        run: |
+          echo "=== Disk usage before cleanup ==="
+          df -h
+          
+          # Очистка кэша apt
+          sudo apt-get clean
+          sudo rm -rf /var/lib/apt/lists/*
+          
+          # Очистка временных файлов
+          sudo rm -rf /tmp/*
+          sudo rm -rf /var/tmp/*
+          
+          # Очистка кэша Docker
+          docker system prune -af || true
+          
+          # Очистка кэша GitHub Actions
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /usr/local/share/boost
+          sudo rm -rf /usr/local/lib/android/sdk/ndk-bundle
+          
+          echo "=== Disk usage after cleanup ==="
+          df -h
