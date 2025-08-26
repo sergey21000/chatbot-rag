@@ -2,6 +2,10 @@ name: Build and Push Docker (CPU only)
 
 on: workflow_dispatch
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   docker-cpu:
     runs-on: ubuntu-24.04
