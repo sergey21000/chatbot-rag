@@ -8,10 +8,7 @@ on:
         required: true
         default: both
         type: choice
-        options:
-          - both
-          - cuda
-          - cpu
+        options: ['both', 'cuda', 'cpu']
 
 permissions:
   contents: write
@@ -38,7 +35,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push CPU image
-        if: ${{ github.event.inputs.target == 'cpu' || github.event.inputs.target == 'both' }}
+        if: ${{ github.event.inputs.build_target == 'cpu' || github.event.inputs.build_target == 'both' }}
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -51,7 +48,7 @@ jobs:
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cpu-${{ github.sha }}
 
       - name: Build and push CUDA image
-        if: ${{ github.event.inputs.target == 'cuda' || github.event.inputs.target == 'both' }}
+        if: ${{ github.event.inputs.build_target == 'cuda' || github.event.inputs.build_target == 'both' }}
         uses: docker/build-push-action@v6
         with:
           context: .
