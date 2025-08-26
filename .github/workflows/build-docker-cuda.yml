@@ -1,4 +1,4 @@
-name: Build CUDA Image with Wheels Extraction
+name: Build and Push Docker (CUDA Image with Wheels Extraction)
 
 on: workflow_dispatch
 
@@ -64,4 +64,5 @@ jobs:
           platforms: linux/amd64
           tags: |
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda
+
 
