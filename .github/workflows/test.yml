@@ -7,7 +7,7 @@ permissions:
   packages: write
 
 jobs:
-  check-one:
+  check-clear:
     runs-on: ubuntu-24.04
     steps:
       - name: Clean up disk space before build
@@ -24,10 +24,11 @@ jobs:
           df -h
           docker system df
           
-  check-two:
+  check-no-clear:
     runs-on: ubuntu-24.04
+    needs: check-clear
     steps:
-      - name: Clean up disk space before build
+      - name: Check next job
         run: |
           echo "=== Disk usage before cleanup ==="
           df -h
