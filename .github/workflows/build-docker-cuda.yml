@@ -7,44 +7,44 @@ permissions:
   packages: write
 
 jobs:
-  build-and-push-builder:
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+  # build-and-push-builder:
+  #   runs-on: ubuntu-24.04
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v3
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.repository_owner }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check disk usage
-        run: df -h
+  #     - name: Check disk usage
+  #       run: df -h
 
-      - name: Build and push image builder
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile-cuda-nvidia-builder
-          push: true
-          # pull: true
-          platforms: linux/amd64
-          tags: |
-            ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-builder-cuda
-          # build-args: |
-            # BUILDKIT_INLINE_CACHE=1
+  #     - name: Build and push image builder
+  #       uses: docker/build-push-action@v6
+  #       with:
+  #         context: .
+  #         file: Dockerfile-cuda-nvidia-builder
+  #         push: true
+  #         # pull: true
+  #         platforms: linux/amd64
+  #         tags: |
+  #           ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-builder-cuda
+  #         # build-args: |
+  #           # BUILDKIT_INLINE_CACHE=1
 
-      - name: Check disk usage
-        run: df -h
+  #     - name: Check disk usage
+  #       run: df -h
 
   build-and-push-final:
     runs-on: ubuntu-24.04
-    needs: build-and-push-builder
+    # needs: build-and-push-builder
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -68,7 +68,7 @@ jobs:
           context: .
           file: Dockerfile-cuda-nvidia-final
           push: true
-          pull: true
+          # pull: true
           platforms: linux/amd64
           tags: |
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda
@@ -78,3 +78,4 @@ jobs:
 
       - name: Check disk usage
         run: df -h
+
