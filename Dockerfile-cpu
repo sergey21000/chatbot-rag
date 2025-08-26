@@ -1,7 +1,7 @@
 FROM python:3.12 AS builder
 
 WORKDIR /app
-COPY requirements/requirements-base.txt requirements/requirements-cpu.txt .
+COPY requirements-base.txt requirements-cpu.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels \
 	-r requirements.txt -r requirements-cpu.txt
 

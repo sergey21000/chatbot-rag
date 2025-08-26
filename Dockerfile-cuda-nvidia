@@ -9,7 +9,7 @@ ENV CUDA_DOCKER_ARCH="sm_75,sm_80,sm_86,sm_89,sm_90"
 ENV GGML_CUDA=1
 ENV CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=75;80;86;89;90"
 
-COPY requirements/requirements-base.txt requirements/requirements-cuda.txt .
+COPY requirements-base.txt requirements-cuda.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels \
     -r requirements-base.txt $(grep -v '^torch' requirements-cuda.txt | tr -d '\r')
 
