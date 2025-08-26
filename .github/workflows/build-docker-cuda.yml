@@ -20,7 +20,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile-builder
+          file: Dockerfile-cuda-nvidia-builder
           push: false
           platforms: linux/amd64
           tags: |
@@ -73,9 +73,10 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile-final
+          file: Dockerfile-cuda-nvidia-final
           push: true
           platforms: linux/amd64
           tags: |
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda
+
 
