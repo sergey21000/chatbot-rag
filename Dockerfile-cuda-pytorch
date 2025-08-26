@@ -10,7 +10,7 @@ ENV CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=75;80;86;89;90"
 
 COPY requirements-base.txt requirements-cuda.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels \
-    -r requirements-base.txt $(grep -v '^torch' requirements-cuda.txt | tr -d '\r')
+    $(grep -v '^torch' requirements-cuda.txt | tr -d '\r')
 
 FROM pytorch/pytorch:2.8.0-cuda12.9-cudnn9-runtime
 

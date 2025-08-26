@@ -1,8 +1,8 @@
-#gradio==5.42.0
-#langchain==0.3.27
-#langchain-community==0.3.27
-#langchain-huggingface==0.3.1
-#sentence-transformers==5.1.0
+gradio==5.42.0
+langchain==0.3.27
+langchain-community==0.3.27
+langchain-huggingface==0.3.1
+sentence-transformers==5.1.0
 pdfminer.six==20250506
 youtube-transcript-api==1.1.1
 psutil==7.0.0
