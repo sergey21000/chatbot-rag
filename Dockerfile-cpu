@@ -1,13 +1,19 @@
-FROM python:3.12
+FROM python:3.12 AS builder
+
 WORKDIR /app
+COPY requirements/requirements-base.txt requirements/requirements-cpu.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels \
+	-r requirements.txt -r requirements-cpu.txt
 
-RUN pip install --no-cache-dir llama_cpp_python==0.3.8
-COPY requirements-cpu.txt requirements-base.txt .
-RUN pip install --no-cache-dir -r requirements-cpu.txt
+FROM python:3.12-slim
 
-COPY app.py .
-COPY utils.py .
-COPY config.py .
+RUN apt-get update && apt-get install -y libgomp1 && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /app/wheels /wheels
+RUN pip install --no-cache-dir /wheels/* && rm -rf /wheels
 
+WORKDIR /app
+COPY app.py config.py utils.py .
+
+ENV GRADIO_SERVER_NAME=0.0.0.0
 EXPOSE 7860
 CMD ["python3", "app.py"]

@@ -124,7 +124,7 @@ cd chatbot-rag
 - *С поддержкой CUDA*
   - Linux
     ```sh
-    CMAKE_ARGS="-DGGML_CUDA=on pip install -r requirements-cuda.txt
+    CMAKE_ARGS="-DGGML_CUDA=on" pip install -r requirements-cuda.txt
     ```
   - Windows CMD
     ```sh
@@ -166,7 +166,7 @@ python3 app.py
 	-v ./embed_models:/app/embed_models \
 	-v ./models:/app/models \
 	--name chatbot-rag \
-	sergey21000/chatbot-rag:cpu-v1.0
+	ghcr.io/sergey21000/chatbot-rag:legacy-langchain-v0.2-cpu
   ```
 
 - *С поддержкой CUDA 12.6*
@@ -175,7 +175,7 @@ python3 app.py
 	-v ./embed_models:/app/embed_models \
 	-v ./models:/app/models \
 	--name chatbot-rag \
-	sergey21000/chatbot-rag:pytorch2.6.0-cuda12.6-v1.0
+	ghcr.io/sergey21000/chatbot-rag:legacy-langchain-v0.2-cuda
   ```
 
 Для проброса своего конфига в контейнер добавить `-v ./config.py:/app/config.py`
@@ -241,4 +241,3 @@ cd chatbot-rag
 ## Лицензия
 
 Этот проект лицензирован на условиях лицензии [MIT](./LICENSE).
-

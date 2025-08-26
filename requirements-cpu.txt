@@ -1,5 +1,5 @@
 --extra-index-url https://download.pytorch.org/whl/cpu
 --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu
-torch==2.6.0
-llama_cpp_python==0.3.8
+torch==2.8.0
+llama_cpp_python==0.3.16
 -r requirements-base.txt
