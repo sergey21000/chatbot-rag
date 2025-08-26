@@ -18,4 +18,3 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels \
 
 FROM scratch AS export-wheels
 COPY --from=builder /wheels /wheels
-
