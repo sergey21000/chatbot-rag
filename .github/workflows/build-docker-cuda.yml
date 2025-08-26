@@ -23,6 +23,7 @@ jobs:
           file: Dockerfile-cuda-nvidia-builder
           push: false
           platforms: linux/amd64
+          target: export-wheels
           outputs: type=local,dest=./wheels
 
       - name: Upload wheels artifact
