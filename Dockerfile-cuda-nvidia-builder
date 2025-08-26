@@ -1,4 +1,4 @@
-ARG CUDA_IMAGE=12.9.1-devel-ubuntu24.04
+ARG CUDA_IMAGE=12.9.1-devel-ubuntu24.04 AS builder
 FROM nvcr.io/nvidia/cuda:${CUDA_IMAGE}
 
 RUN apt-get update \
@@ -17,4 +17,5 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels \
     && rm -rf /root/.cache/pip
 
 FROM scratch AS export-wheels
+
 COPY --from=builder /wheels /wheels
