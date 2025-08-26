@@ -7,7 +7,7 @@ RUN apt-get update \
 
 COPY wheels /wheels
 
-RUN pip install --no-cache-dir --break-system-packages /wheels \
+RUN pip install --no-cache-dir --break-system-packages /wheels/* \
     && rm -rf /wheels /root/.cache/pip
 
 WORKDIR /app
