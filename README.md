@@ -169,7 +169,7 @@ python3 app.py
 	ghcr.io/sergey21000/chatbot-rag:legacy-langchain-v0.2-cpu
   ```
 
-- *С поддержкой CUDA 12.6*
+- *С поддержкой CUDA*
   ```sh
   docker run -it --gpus all -p 7860:7860 \
 	-v ./embed_models:/app/embed_models \
@@ -241,3 +241,4 @@ cd chatbot-rag
 ## Лицензия
 
 Этот проект лицензирован на условиях лицензии [MIT](./LICENSE).
+
