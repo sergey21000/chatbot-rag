@@ -23,9 +23,6 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check disk usage
-        run: df -h
-
       - name: Build and push CUDA image
         uses: docker/build-push-action@v6
         with:
@@ -36,3 +33,5 @@ jobs:
           platforms: linux/amd64
           tags: |
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
