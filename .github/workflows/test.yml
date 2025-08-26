@@ -7,10 +7,9 @@ permissions:
   packages: write
 
 jobs:
-  docker-cuda:
-    runs-on: ubuntu-24.04
+  check-one:
+    runs-on: ubuntu-22.04
     steps:
-    
       - name: Clean up disk space before build
         run: |
           echo "=== Disk usage before cleanup ==="
@@ -34,4 +33,12 @@ jobs:
           sudo rm -rf /usr/local/lib/android/sdk/ndk-bundle
           
           echo "=== Disk usage after cleanup ==="
+          df -h
+
+  check-two:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Clean up disk space before build
+        run: |
+          echo "=== Disk usage before cleanup ==="
           df -h
