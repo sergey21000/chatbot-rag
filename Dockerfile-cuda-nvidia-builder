@@ -17,4 +17,5 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels \
     && rm -rf /root/.cache/pip
 
 FROM scratch AS export-wheels
-COPY --from=builder wheels/*.whl /wheels/
+COPY --from=builder /wheels /wheels
+
