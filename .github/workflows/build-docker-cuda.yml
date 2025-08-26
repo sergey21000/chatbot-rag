@@ -32,4 +32,3 @@ jobs:
           platforms: linux/amd64
           tags: |
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda
-            ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda-${{ github.sha }}
