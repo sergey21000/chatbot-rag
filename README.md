@@ -20,6 +20,7 @@
 
 <a href="https://github.com/sergey21000/chatbot-rag/tree/main/screenshots">Скриншоты</a> интерфейса приложения
 
+
 ---
 ## 📋 Содержание
 
@@ -81,6 +82,7 @@
 - [Embedding Модель](https://huggingface.co/Alibaba-NLP/gte-multilingual-base) `Alibaba-NLP/gte-multilingual-base` в качестве Embedding модели по умолчанию
 
 Работоспособность приложения проверялась на Ubuntu 22.04 (python 3.10) и Windows 10 (python 3.12)
+
 
 ---
 ## 🐍 Установка и запуск через Python
