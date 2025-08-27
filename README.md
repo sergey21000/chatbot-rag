@@ -3,12 +3,10 @@
 ---
 # RAG Chatbot with Gradio, llama-cpp-python, and Langchain
 
-<div align="center">
+<div align="left">
 
 <a href="https://huggingface.co/spaces/sergey21000/chatbot-rag"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-yellow" alt="Hugging Face Spaces"></a>
-<a href="https://hub.docker.com/r/sergey21000/chatbot-rag"><img src="https://img.shields.io/badge/Docker-Hub-blue?logo=docker" alt="Docker Hub "></a>
 </div>
-
 
 Чат-бот на `llama-cpp-python` и `langchain` с веб-интерфейсом на `Gradio`, использующий механизм RAG для эффективного поиска и генерации ответов
 
@@ -21,6 +19,7 @@
 </details>
 
 <a href="https://github.com/sergey21000/chatbot-rag/tree/main/screenshots">Скриншоты</a> интерфейса приложения
+
 
 ---
 ## 📋 Содержание
@@ -84,6 +83,7 @@
 
 Работоспособность приложения проверялась на Ubuntu 22.04 (python 3.10) и Windows 10 (python 3.12)
 
+
 ---
 ## 🐍 Установка и запуск через Python
 
@@ -124,7 +124,7 @@ cd chatbot-rag
 - *С поддержкой CUDA*
   - Linux
     ```sh
-    CMAKE_ARGS="-DGGML_CUDA=on pip install -r requirements-cuda.txt
+    CMAKE_ARGS="-DGGML_CUDA=on" pip install -r requirements-cuda.txt
     ```
   - Windows CMD
     ```sh
@@ -151,6 +151,12 @@ python3 app.py
 После запуска сервера перейти в браузере по адресу http://localhost:7860/  
 Приложение будет доступно через некоторое время (после первоначальной загрузки моделей)
 
+Запуск тестов
+```
+pytest -vs
+```
+
+
 ---
 ## 🐳 Установка и запуск через Docker
 
@@ -166,16 +172,16 @@ python3 app.py
 	-v ./embed_models:/app/embed_models \
 	-v ./models:/app/models \
 	--name chatbot-rag \
-	sergey21000/chatbot-rag:cpu-v1.0
+	ghcr.io/sergey21000/chatbot-rag:legacy-langchain-v0.2-cpu
   ```
 
-- *С поддержкой CUDA 12.6*
+- *С поддержкой CUDA*
   ```sh
   docker run -it --gpus all -p 7860:7860 \
 	-v ./embed_models:/app/embed_models \
 	-v ./models:/app/models \
 	--name chatbot-rag \
-	sergey21000/chatbot-rag:pytorch2.6.0-cuda12.6-v1.0
+	ghcr.io/sergey21000/chatbot-rag:legacy-langchain-v0.2-cuda
   ```
 
 Для проброса своего конфига в контейнер добавить `-v ./config.py:/app/config.py`
@@ -241,4 +247,3 @@ cd chatbot-rag
 ## Лицензия
 
 Этот проект лицензирован на условиях лицензии [MIT](./LICENSE).
-
