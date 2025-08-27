@@ -8,7 +8,6 @@
 <a href="https://huggingface.co/spaces/sergey21000/chatbot-rag"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-yellow" alt="Hugging Face Spaces"></a>
 </div>
 
-
 Чат-бот на `llama-cpp-python` и `langchain` с веб-интерфейсом на `Gradio`, использующий механизм RAG для эффективного поиска и генерации ответов
 
 В Google Colab <a href="https://colab.research.google.com/drive/1ZckPUFlRykskJKF5OzwiX82PFcRKNN23"><img src="https://img.shields.io/static/v1?message=Open%20in%20Colab&logo=googlecolab&labelColor=5c5c5c&color=0f80c1&label=%20" alt="Open in Colab"></a> ноутбуке находится код приложения с комментариями
@@ -150,6 +149,12 @@ python3 app.py
 После запуска сервера перейти в браузере по адресу http://localhost:7860/  
 Приложение будет доступно через некоторое время (после первоначальной загрузки моделей)
 
+Запуск тестов
+```
+pytest -vs
+```
+
+
 ---
 ## 🐳 Установка и запуск через Docker
 
@@ -240,5 +245,3 @@ cd chatbot-rag
 ## Лицензия
 
 Этот проект лицензирован на условиях лицензии [MIT](./LICENSE).
-
-
