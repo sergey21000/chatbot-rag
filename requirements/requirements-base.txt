@@ -1,0 +1,9 @@
+gradio==5.42.0
+sentence-transformers==5.1.0
+unstructured[csv,docx,md,org,pdf,pptx,tsv,xlsx]==0.18.14
+chromadb==1.0.20
+youtube-transcript-api==1.2.2
+psutil==7.0.0
+pytest==8.4.1
+python-dotenv==1.1.1
+pytest==8.4.1
