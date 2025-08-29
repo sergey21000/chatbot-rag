@@ -27,8 +27,9 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile-cpu
+          file: docker/Dockerfile-cpu
           push: true
+          pull: true
           platforms: linux/amd64
           tags: |
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cpu

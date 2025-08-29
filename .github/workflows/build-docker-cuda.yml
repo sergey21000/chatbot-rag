@@ -20,7 +20,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile-cuda-nvidia-builder
+          file: docker/workflow/Dockerfile-cuda-nvidia-builder
           push: false
           platforms: linux/amd64
           target: export-wheels
@@ -36,6 +36,13 @@ jobs:
     runs-on: ubuntu-24.04
     needs: build-wheels
     steps:
+      - name: Clean up disk space before build
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          docker system prune -af || true
+  
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -59,10 +66,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile-cuda-nvidia-final
+          file: docker/workflow/Dockerfile-cuda-nvidia-final
           push: true
           platforms: linux/amd64
           tags: |
             ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda
-
-
