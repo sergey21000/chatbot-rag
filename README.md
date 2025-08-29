@@ -177,12 +177,12 @@ cd chatbot-rag/docker
 
 *Запуск с поддержкой CPU*
 ```sh
-docker-compose up -f compose.run.cpu.yml
+docker-compose -f compose.run.cpu.yml up
 ```
 
 *Запуск с поддержкой CUDA*
 ```sh
-docker-compose up -f compose.run.cuda.yml
+docker-compose -f compose.run.cuda.yml up
 ```
 
 Веб-интерфейс сервера доступен по адресу  
@@ -193,12 +193,12 @@ http://127.0.0.1:7860/
 
 *Запуск с поддержкой CPU*
 ```sh
-docker-compose up -f compose.run.cpu.yml
+docker-compose -f compose.run.cpu.yml up
 ```
 
 *Запуск с поддержкой CUDA*
 ```sh
-docker-compose up -f compose.run.cuda.yml
+docker-compose -f compose.run.cuda.yml up
 ```
 При первом запуске будет произведена сборка образа на основе `Dockerfile-cpu` или `Dockerfile-cuda`
 
