@@ -9,10 +9,10 @@ ENV CUDA_DOCKER_ARCH="sm_75,sm_80,sm_86,sm_89,sm_90"
 ENV GGML_CUDA=1
 ENV CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=75;80;86;89;90"
 
-WORKDIR /app
 COPY requirements/requirements-base.txt requirements/requirements-cuda.txt .
 
 RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements-cuda.txt 
 
 FROM scratch AS export-wheels
+
 COPY --from=builder /wheels /wheels
