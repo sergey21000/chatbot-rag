@@ -1,9 +1,0 @@
-gradio==5.25.2
-langchain==0.3.23
-langchain-community==0.3.21
-langchain-huggingface==0.1.2
-pdfminer.six==20250416
-youtube-transcript-api==1.0.3
-psutil==7.0.0
-faiss-cpu==1.10.0
-beautifulsoup4==4.13.4
