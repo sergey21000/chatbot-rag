@@ -3,7 +3,7 @@ services:
     extends:
       file: compose.base.yml
       service: gradio-app
-    image: sergey21000/yolo-detector:ultralytics-cuda
+    image: ghcr.io/sergey21000/chatbot-rag:main-cuda
     deploy:
       resources:
         reservations:
