@@ -3,6 +3,7 @@ FROM python:3.12 AS builder
 COPY requirements/requirements-base.txt requirements/requirements-cpu.txt .
 RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements-cpu.txt
 
+
 FROM python:3.12-slim
 
 RUN apt-get update && apt-get install -y libgomp1 && rm -rf /var/lib/apt/lists/*
