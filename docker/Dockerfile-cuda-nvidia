@@ -11,9 +11,7 @@ ENV GGML_CUDA=1
 ENV CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=75;80;86;89;90"
 
 COPY requirements/requirements-base.txt requirements/requirements-cuda.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels \
-    -r requirements-cuda.txt \
-	&& rm -rf /root/.cache/pip
+RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements-cuda.txt
 
 ARG CUDA_IMAGE=12.9.1-runtime-ubuntu24.04
 FROM nvcr.io/nvidia/cuda:${CUDA_IMAGE}
@@ -23,11 +21,13 @@ RUN apt-get update \
     && apt-get clean && rm -rf \
 	/var/lib/apt/lists/* /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-COPY --from=builder /app/wheels /wheels
+COPY --from=builder /wheels /wheels
 RUN pip install --no-cache-dir --break-system-packages /wheels/* && rm -rf /wheels /root/.cache/pip
 
 WORKDIR /app
-COPY app.py config.py utils.py .
+COPY modules modules
+COPY tests tests
+COPY app.py config.py .
 
 ENV GRADIO_SERVER_NAME=0.0.0.0
 EXPOSE 7860

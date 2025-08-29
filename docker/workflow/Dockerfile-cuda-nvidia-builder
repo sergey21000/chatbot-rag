@@ -12,9 +12,7 @@ ENV CMAKE_ARGS="-DGGML_CUDA=on -DCMAKE_CUDA_ARCHITECTURES=75;80;86;89;90"
 WORKDIR /app
 COPY requirements/requirements-base.txt requirements/requirements-cuda.txt .
 
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels \
-    -r requirements-cuda.txt \
-    && rm -rf /root/.cache/pip
+RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements-cuda.txt 
 
 FROM scratch AS export-wheels
 COPY --from=builder /wheels /wheels
