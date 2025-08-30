@@ -1,7 +1,7 @@
 FROM pytorch/pytorch:2.8.0-cuda12.9-cudnn9-devel AS builder
 
 RUN apt-get update \
-	&& apt-get install -y git ca-certificates \
+	&& apt-get install -y --no-install-recommends git ca-certificates \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 ENV CUDA_DOCKER_ARCH="sm_75,sm_80,sm_86,sm_89,sm_90"
@@ -12,9 +12,10 @@ COPY requirements-base.txt requirements-cuda.txt .
 RUN pip wheel --no-cache-dir --wheel-dir /wheels \
     $(grep -v '^torch' requirements-cuda.txt | tr -d '\r')
 
+
 FROM pytorch/pytorch:2.8.0-cuda12.9-cudnn9-runtime
 
-RUN apt-get update && apt-get install -y libgomp1 libgl1 libglib2.0-0 \
+RUN apt-get update && apt-get install -y --no-install-recommends libgomp1 libgl1 libglib2.0-0 \
 	&& apt-get clean && rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 COPY --from=builder /wheels /wheels
