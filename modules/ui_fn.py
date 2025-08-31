@@ -324,6 +324,8 @@ class UiFnChat:
             if token is None:
                 continue
             if show_thinking:
+                if token == '<think>':
+                    gr.Info('Thinking...')
                 chatbot[-1]['content'] += token
                 yield chatbot
                 continue
@@ -334,6 +336,7 @@ class UiFnChat:
             elif token == '</think>':
                 is_think = False
                 chatbot[-1]['content'] = ''
+                continue
             if not is_think:
                 chatbot[-1]['content'] += token
             yield chatbot
