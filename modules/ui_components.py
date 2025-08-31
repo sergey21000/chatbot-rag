@@ -82,6 +82,7 @@ class UiChatbot(UiBase):
         self.chatbot = gr.Chatbot(
             type='messages',
             show_copy_button=True,
+            sanitize_html=False if CONF.generation_kwargs['show_thinking'] else True,
             height=400,  # 480
             render=False,
         )
@@ -389,4 +390,5 @@ class UiLoadModel(UiBase):
             lines=7,
             render=False,
         )
+
         self.clear_embed_folder_btn = gr.Button('Clear folder', render=False)
