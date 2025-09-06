@@ -44,8 +44,8 @@ jobs:
           pull: true
           platforms: linux/amd64
           tags: |
-            ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cpu
-            ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cpu-${{ github.sha }}
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}-cpu
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}-cpu-${{ github.sha }}
 
       - name: Build and push CUDA image
         if: ${{ github.event.inputs.build_target == 'cuda' || github.event.inputs.build_target == 'both' }}
@@ -57,5 +57,5 @@ jobs:
           pull: true
           platforms: linux/amd64
           tags: |
-            ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda
-            ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda-${{ github.sha }}
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}-cuda
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}-cuda-${{ github.sha }}

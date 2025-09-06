@@ -70,4 +70,4 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: |
-            ghcr.io/sergey21000/chatbot-rag:${{ github.ref_name }}-cuda
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}-cuda
