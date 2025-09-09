@@ -13,7 +13,6 @@ env:
 
   LLM_MODELS_PATH: models
   EMBED_MODELS_PATH: embed_models
-  EMBED_MODEL_PATH: ${{ env.EMBED_MODELS_PATH }}/$models--{{ env.EMBED_MODEL_REPO.replace('/', '--') }}
   
 
 jobs:
@@ -35,7 +34,8 @@ jobs:
         run: |
           hf download ${{ env.LLM_MODEL_REPO }} ${{ env.LLM_MODEL_FILE }} \
           --local-dir ${{ env.LLM_MODELS_PATH }}
-          hf download ${{ env.EMBED_MODEL_REPO }} --local-dir ${{ env.EMBED_MODEL_PATH }}
+          hf download ${{ env.EMBED_MODEL_REPO }} \
+          --local-dir ${{ env.EMBED_MODELS_PATH }}/models--{{ env.EMBED_MODEL_REPO.replace('/', '--') }}
 
       - name: Upload model artifact
         uses: actions/upload-artifact@v4
