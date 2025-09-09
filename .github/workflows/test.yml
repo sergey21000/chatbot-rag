@@ -28,10 +28,10 @@ jobs:
         run: pip install huggingface-hub[hf_xet]
           
       - name: Download models
-        run: >
-          hf download ${{ env.LLM_MODEL_REPO }} ${{ env.LLM_MODEL_FILE }} 
+        run: |
+          hf download ${{ env.LLM_MODEL_REPO }} ${{ env.LLM_MODEL_FILE }} \
           --local-dir ${{ env.LOCAL_DIR }} --cache-dir ${{ env.LOCAL_DIR }}
-          hf download ${{ env.EMBED_MODEL_REPO }} --local-dir ${{ env.LOCAL_DIR }} --cache-dir ${{ env.LOCAL_DIR }}
+          hf download --repo_id ${{ env.EMBED_MODEL_REPO }} --local-dir ${{ env.LOCAL_DIR }} --cache-dir ${{ env.LOCAL_DIR }}
 
       - name: Upload model artifact
         uses: actions/upload-artifact@v4
@@ -111,3 +111,4 @@ jobs:
       - name: Test with pytest
         run: |
           python -m pytest -vs
+
