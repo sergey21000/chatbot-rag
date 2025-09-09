@@ -1,0 +1,31 @@
+name: Test Unstructured
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install gradio==5.42.0 `
+                      sentence-transformers==5.1.0 `
+                      "unstructured[csv,docx,md,org,pdf,pptx,tsv,xlsx]==0.18.14" `
+                      chromadb==1.0.20 `
+                      youtube-transcript-api==1.2.2 `
+                      psutil==7.0.0 `
+                      pytest==8.4.1 `
+                      python-dotenv==1.1.1 `
+                      python-magic-bin
+      - name: Show installed packages
+        run: pip freeze
+      - name: Test import
+        run: python -c "import unstructured; print('Imported OK')"
