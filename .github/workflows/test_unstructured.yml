@@ -24,7 +24,6 @@ jobs:
                       psutil==7.0.0 `
                       pytest==8.4.1 `
                       python-dotenv==1.1.1 `
-                      python-magic-bin
       - name: Show installed packages
         run: pip freeze
       - name: Test import
