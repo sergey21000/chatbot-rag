@@ -13,7 +13,6 @@ env:
 
   LLM_MODELS_PATH: models
   EMBED_MODELS_PATH: embed_models
-  
 
 jobs:
   download-models:
@@ -31,11 +30,15 @@ jobs:
         run: pip install huggingface-hub[hf_xet]
           
       - name: Download models
+        shell: pwsh
         run: |
           hf download ${{ env.LLM_MODEL_REPO }} ${{ env.LLM_MODEL_FILE }} \
           --local-dir ${{ env.LLM_MODELS_PATH }}
-          hf download ${{ env.EMBED_MODEL_REPO }} \
-          --local-dir ${{ env.EMBED_MODELS_PATH }}/models--{{ env.EMBED_MODEL_REPO.replace('/', '--') }}
+          
+          $repo = "${{ env.EMBED_MODEL_REPO }}"
+          $folderName = $repo.replace('/', '--')
+          $embedPath = "${{ env.EMBED_MODELS_PATH }}/models--$folderName"
+          hf download $repo --local-dir $embedPath
 
       - name: Upload model artifact
         uses: actions/upload-artifact@v4
