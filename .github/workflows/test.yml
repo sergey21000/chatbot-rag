@@ -47,6 +47,7 @@ jobs:
   test-linux:
     needs: download-model
     runs-on: ubuntu-24.04
+    timeout-minutes: 60
     strategy:
       matrix:
         python-version: ["3.11", "3.12"]
@@ -82,6 +83,7 @@ jobs:
   test-windows:
     needs: download-model
     runs-on: windows-2022
+    timeout-minutes: 60
     strategy:
       matrix:
         python-version: ["3.11", "3.12"]
@@ -113,4 +115,3 @@ jobs:
       - name: Test with pytest
         run: |
           python -m pytest -vs
-
