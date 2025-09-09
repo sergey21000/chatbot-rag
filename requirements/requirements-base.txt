@@ -7,3 +7,4 @@ psutil==7.0.0
 pytest==8.4.1
 python-dotenv==1.1.1
 pytest==8.4.1
+python-magic-bin; sys_platform == "win32"
