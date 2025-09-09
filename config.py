@@ -111,8 +111,8 @@ class PromptConfig:
 class ModelConfig:
     '''Configuration of paths, models and generation parameters'''
     def __init__(self):
-        self.LLM_MODELS_PATH: Path = Path('models')
-        self.EMBED_MODELS_PATH: Path = Path('embed_models')
+        self.LLM_MODELS_PATH: Path = Path(os.getenv('LLM_MODELS_PATH', 'models'))
+        self.EMBED_MODELS_PATH: Path = Path(os.getenv('EMBED_MODELS_PATH', 'embed_models'))
         self.LLM_MODELS_PATH.mkdir(exist_ok=True)
         self.EMBED_MODELS_PATH.mkdir(exist_ok=True)
         self.llm_model_repo: str = os.getenv('REPO_ID', 'bartowski/google_gemma-3-1b-it-GGUF')
@@ -264,3 +264,4 @@ class Config:
             n_results=self.generation_kwargs['n_results'],
             max_distance_treshold=self.generation_kwargs['max_distance_treshold'],
         )
+
