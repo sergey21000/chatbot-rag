@@ -89,7 +89,7 @@ jobs:
 
   test-windows:
     needs: download-models
-    runs-on: windows-2022  # windows-2025
+    runs-on: windows-2025  # windows-2025
     timeout-minutes: 60
     strategy:
       matrix:
