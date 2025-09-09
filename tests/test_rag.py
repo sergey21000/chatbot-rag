@@ -50,9 +50,9 @@ def embed_model():
 
 @pytest.fixture
 def test_db(embed_model):
-    # файлы и ссылки на видео для проверки
     upload_files: list[str] = ['tests/test_files/Pasport-huter-MK-7000-7800.pdf']
-    web_links: str = 'https://www.youtube.com/watch?v=CFVABT8wtl4 https://www.youtube.com/watch?v=EEGk7gHoKfY'
+    web_links: str = ''
+    # web_links: str = 'https://www.youtube.com/watch?v=CFVABT8wtl4 https://www.youtube.com/watch?v=EEGk7gHoKfY'
     texts, load_log = UiFnDb.load_texts_and_create_db(
         upload_files=upload_files,
         urls=web_links,
@@ -103,3 +103,4 @@ def test_rag_pipepline(llm_model, test_db):
     assert len(assistant_message) > 0, 'LLM did not respond'
 
     print(f'Chatbot response: {assistant_message}')
+
