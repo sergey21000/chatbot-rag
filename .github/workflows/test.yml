@@ -13,7 +13,6 @@ env:
 
   LLM_MODELS_PATH: models
   EMBED_MODELS_PATH: embed_models
-  
 
 jobs:
   download-models:
@@ -115,9 +114,9 @@ jobs:
       - name: Check model exists
         run: |
           echo "LLM models:"
-          ls -lh ${{ env.LLM_MODELS_PATH }}
+          dir ${{ env.LLM_MODELS_PATH }}
           echo "Embed models:"
-          ls -lh ${{ env.EMBED_MODELS_PATH }}
+          dir ${{ env.EMBED_MODELS_PATH }}
 
       - name: Install dependencies
         run: |
