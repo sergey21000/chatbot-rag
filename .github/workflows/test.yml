@@ -7,8 +7,9 @@ permissions:
 
 env:
   PYTHONUTF8: 1
-  REPO_ID: bartowski/Qwen_Qwen3-0.6B-GGUF
-  FILENAME: Qwen_Qwen3-0.6B-Q4_K_M.gguf
+  LLM_MODEL_REPO: bartowski/Qwen_Qwen3-0.6B-GGUF
+  LLM_MODEL_FILE: Qwen_Qwen3-0.6B-Q4_K_M.gguf
+  EMBED_MODEL_REPO: sergeyzh/rubert-tiny-turbo
   LOCAL_DIR: models
 
 jobs:
@@ -36,13 +37,14 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.LOCAL_DIR }}
-          key: ${{ runner.os }}-model-${{ env.REPO_ID }}-${{ env.FILENAME }}
+          key: ${{ runner.os }}-model-${{ env.LLM_MODEL_REPO }}-${{ env.LLM_MODEL_FILE }}
           
       - name: Download model
         run: >
-          hf download ${{ env.REPO_ID }} ${{ env.FILENAME }} 
+          hf download ${{ env.LLM_MODEL_REPO }} ${{ env.LLM_MODEL_FILE }} 
           --local-dir ${{ env.LOCAL_DIR }} --cache-dir ${{ env.LOCAL_DIR }}
-
+          hf download ${{ env.EMBED_MODEL_REPO }} --local-dir ${{ env.LOCAL_DIR }} --cache-dir ${{ env.LOCAL_DIR }}
+        
   test-linux:
     needs: download-model
     runs-on: ubuntu-24.04
@@ -65,7 +67,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.LOCAL_DIR }}
-          key: ${{ runner.os }}-model-${{ env.REPO_ID }}-${{ env.FILENAME }}
+          key: ${{ runner.os }}-model-${{ env.LLM_MODEL_REPO }}-${{ env.LLM_MODEL_FILE }}
       
       - name: Check model exists
         run: ls -lh ${{ env.LOCAL_DIR }}
@@ -101,7 +103,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.LOCAL_DIR }}
-          key: ${{ runner.os }}-model-${{ env.REPO_ID }}-${{ env.FILENAME }}
+          key: ${{ runner.os }}-model-${{ env.LLM_MODEL_REPO }}-${{ env.LLM_MODEL_FILE }}
 
       - name: Check model exists
         run: dir ${{ env.LOCAL_DIR }}
