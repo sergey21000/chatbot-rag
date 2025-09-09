@@ -13,11 +13,8 @@ env:
   LOCAL_DIR: models
 
 jobs:
-  download-model:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-24.04, windows-2022]
+  download-models:
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -29,24 +26,22 @@ jobs:
           
       - name: Install huggingface-hub
         run: pip install huggingface-hub[hf_xet]
-
-      - name: Create model directory (need for Windows)
-        run: mkdir -p ${{ env.LOCAL_DIR }}
-
-      - name: Cache model
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.LOCAL_DIR }}
-          key: ${{ runner.os }}-model-${{ env.LLM_MODEL_REPO }}-${{ env.LLM_MODEL_FILE }}
           
-      - name: Download model
+      - name: Download models
         run: >
           hf download ${{ env.LLM_MODEL_REPO }} ${{ env.LLM_MODEL_FILE }} 
           --local-dir ${{ env.LOCAL_DIR }} --cache-dir ${{ env.LOCAL_DIR }}
           hf download ${{ env.EMBED_MODEL_REPO }} --local-dir ${{ env.LOCAL_DIR }} --cache-dir ${{ env.LOCAL_DIR }}
-        
+
+      - name: Upload model artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: model
+          path: ${{ env.LOCAL_DIR }}
+          overwrite: true
+
   test-linux:
-    needs: download-model
+    needs: download-models
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     strategy:
@@ -63,11 +58,11 @@ jobs:
           cache: 'pip'
           cache-dependency-path: 'requirements/requirements-cpu.txt'
 
-      - name: Restore model cache
-        uses: actions/cache@v4
+      - name: Download model artifact
+        uses: actions/download-artifact@v4
         with:
+          name: model
           path: ${{ env.LOCAL_DIR }}
-          key: ${{ runner.os }}-model-${{ env.LLM_MODEL_REPO }}-${{ env.LLM_MODEL_FILE }}
       
       - name: Check model exists
         run: ls -lh ${{ env.LOCAL_DIR }}
@@ -82,7 +77,7 @@ jobs:
           python -m pytest -vs
 
   test-windows:
-    needs: download-model
+    needs: download-models
     runs-on: windows-2022
     timeout-minutes: 60
     strategy:
@@ -99,11 +94,11 @@ jobs:
           cache: 'pip'
           cache-dependency-path: 'requirements/requirements-cpu.txt'
 
-      - name: Restore model cache
-        uses: actions/cache@v4
+      - name: Download model artifact
+        uses: actions/download-artifact@v4
         with:
+          name: model
           path: ${{ env.LOCAL_DIR }}
-          key: ${{ runner.os }}-model-${{ env.LLM_MODEL_REPO }}-${{ env.LLM_MODEL_FILE }}
 
       - name: Check model exists
         run: dir ${{ env.LOCAL_DIR }}
