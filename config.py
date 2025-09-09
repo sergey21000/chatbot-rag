@@ -115,9 +115,9 @@ class ModelConfig:
         self.EMBED_MODELS_PATH: Path = Path('embed_models')
         self.LLM_MODELS_PATH.mkdir(exist_ok=True)
         self.EMBED_MODELS_PATH.mkdir(exist_ok=True)
-        self.llm_model_repo: str = 'bartowski/google_gemma-3-1b-it-GGUF'
-        self.llm_model_file: str = 'google_gemma-3-1b-it-Q8_0.gguf'
-        self.embed_model_repo: str = 'Alibaba-NLP/gte-multilingual-base'
+        self.llm_model_repo: str = os.getenv('REPO_ID', 'bartowski/google_gemma-3-1b-it-GGUF')
+        self.llm_model_file: str = os.getenv('FILENAME', 'google_gemma-3-1b-it-Q8_0.gguf')
+        self.embed_model_repo: str = os.getenv('EMBED_MODEL_REPO', 'Alibaba-NLP/gte-multilingual-base')
         self.embed_model_kwargs: dict[str, Any] = dict(
             device='cuda:0',
             trust_remote_code=True,
