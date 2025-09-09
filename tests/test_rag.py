@@ -18,9 +18,6 @@ from modules.ui_fn import (
 CHAT_HISTORY = list[gr.ChatMessage | dict[str, str | gr.Component]]
 CONF = Config()
 CONF.generation_kwargs['rag_mode'] = True
-CONF.load_model_kwargs['llm_model_repo'] = 'bartowski/google_gemma-3-1b-it-GGUF'
-CONF.load_model_kwargs['llm_model_file'] = 'google_gemma-3-1b-it-Q8_0.gguf'
-CONF.load_model_kwargs['embed_model_repo'] = 'sergeyzh/rubert-tiny-turbo'
 
 
 class FakeRequest:
@@ -104,4 +101,5 @@ def test_rag_pipepline(llm_model, test_db):
         pass
     assistant_message: str = result_chatbot[-1].get('content', '')
     assert len(assistant_message) > 0, 'LLM did not respond'
+
     print(f'Chatbot response: {assistant_message}')
