@@ -45,7 +45,7 @@ class YouTubeSubLoader:
             except NoTranscriptFound:
                 load_log += f'Subtitle language [{subtitle_lang}] is not available for video {yt_video_url}\n'
         except TranscriptsDisabled:
-            load_log += f'Subtitles language [{subtitle_lang}] are not available for video {yt_video_url}\n'
+            load_log += f'There are no subtitles for the video {yt_video_url}'
         except Exception as ex:
             load_log += f'Error loading subtitles for video ({yt_video_url}): {ex}\n'
         return subtitle_text, load_log
@@ -171,3 +171,4 @@ class TextLoader:
         load_log += f'Number of loaded text chunks: {len(all_texts)}\n'
 
         return all_texts, load_log
+
