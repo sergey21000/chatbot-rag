@@ -193,12 +193,12 @@ http://127.0.0.1:7860/
 
 *Запуск с поддержкой CPU*
 ```sh
-docker-compose -f compose.run.cpu.yml up
+docker-compose -f compose.build.cpu.yml up
 ```
 
 *Запуск с поддержкой CUDA*
 ```sh
-docker-compose -f compose.run.cuda.yml up
+docker-compose -f compose.build.cuda.yml up
 ```
 При первом запуске будет произведена сборка образа на основе `Dockerfile-cpu` или `Dockerfile-cuda`
 
@@ -306,4 +306,5 @@ cd chatbot-rag
 ## Лицензия
 
 Этот проект лицензирован на условиях лицензии [MIT](./LICENSE).
+
 
