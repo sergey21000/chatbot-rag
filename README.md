@@ -214,7 +214,7 @@ http://127.0.0.1:7860/
 export COMPOSE_FILE=compose.run.cpu.yml
 
 # установка переменной окружения (вариант для Windows PowerShell)
-$env:COMPOSE_FILE = "compose.run.cpu.yml"
+$env:COMPOSE_FILE="compose.run.cpu.yml"
 
 # запуск короткой командой
 docker-compose up
@@ -306,5 +306,6 @@ cd chatbot-rag
 ## Лицензия
 
 Этот проект лицензирован на условиях лицензии [MIT](./LICENSE).
+
 
 
