@@ -304,9 +304,9 @@ class UiFnDb:
     ) -> tuple[list[Document], str]:
         load_log = ''
         documents = []
-        loader_class_kwargs = {}
         web_links = [web_link.strip() for web_link in web_links.split() if web_link.strip()]
         for web_link in web_links:
+            loader_class_kwargs = {}
             if 'youtube.com' in web_link:
                 available, log = UiFnService.check_subtitles_available(web_link, subtitles_lang)
                 load_log += log
@@ -550,4 +550,5 @@ class UiFnChat:
         except Exception as ex:
             gr.Info(f'Error generating LLM response, error code:: {ex}')
             yield chatbot[:-2]
+
             return
