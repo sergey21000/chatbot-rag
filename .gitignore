@@ -1,8 +1,5 @@
 # Custom paths
-/data/
 other/
-/llm/vllm
-/llm/sglang
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
