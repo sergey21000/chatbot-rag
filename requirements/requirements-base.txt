@@ -1,10 +1,8 @@
-gradio==5.42.0
-sentence-transformers==5.1.0
-unstructured[csv,docx,md,org,pdf,pptx,tsv,xlsx]==0.18.14
-chromadb==1.0.20
-youtube-transcript-api==1.2.2
-psutil==7.0.0
-pytest==8.4.1
-python-dotenv==1.1.1
-# python-magic; sys_platform != "win32"
-# python-magic-bin; sys_platform == "win32"
+gradio==6.4.0
+sentence-transformers==5.2.0
+unstructured[csv,docx,md,org,pdf,pptx,tsv,xlsx]==0.18.27
+chromadb==1.4.1
+youtube-transcript-api==1.2.3
+psutil==7.2.1
+pytest==9.0.2
+python-dotenv==1.2.1
