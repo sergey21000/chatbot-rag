@@ -80,11 +80,9 @@ class UiChatbot(UiBase):
     '''Gradio UI components for Chatbot Tab'''
     def __init__(self):
         self.chatbot = gr.Chatbot(
-            type='messages',
-            show_copy_button=True,
-            sanitize_html=False if CONF.generation_kwargs['show_thinking'] else True,
-            height=400,  # 480
+            sanitize_html=False,
             render=False,
+            # height=400,  # 480
         )
         self.user_msg = gr.Textbox(label='User', render=False)
         self.user_msg_btn = gr.Button('Send', render=False)
