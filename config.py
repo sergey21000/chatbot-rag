@@ -27,6 +27,7 @@ class UiGradioConfig:
     theme: str | None = None
     fill_height: bool = False
     footer_links: list[str] = ['gradio', 'settings']
+    delete_cache = (86400, 86400)
 
     @classmethod
     def get_demo_launch_kwargs(cls):
@@ -38,7 +39,10 @@ class UiGradioConfig:
 
     @classmethod
     def get_demo_blocks_kwargs(cls):
-        return dict(fill_height=cls.fill_height)
+        return dict(
+            fill_height=cls.fill_height,
+            delete_cache=cls.delete_cache,
+        )
 
 
 class InferenceConfig:
