@@ -279,7 +279,6 @@ class UiFnModel:
 
     @staticmethod
     def get_llm_model_info() -> str:
-        return 'model_info'
         props = llm_client.get_props()
         if props:
             model_info = (
@@ -287,8 +286,9 @@ class UiFnModel:
                 f'Available modalities: {props.get('modalities')}\n\n'
                 f'Information from the /props method of llama.cpp (except chat_template):\n'
             )
-            # return model_info
-            return 'model_info'
+            props.pop('chat_template', None)
+            model_info += pprint.pformat(props)
+            return model_info
         return 'Model not available'
 
 

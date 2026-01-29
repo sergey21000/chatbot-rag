@@ -17,8 +17,8 @@ from modules.ui_components import (
 
 
 CONF = Config()
-# demo = gr.Blocks(**UiGradioConfig.get_demo_blocks_kwargs())
-demo = gr.Blocks()
+demo = gr.Blocks(**UiGradioConfig.get_demo_blocks_kwargs())
+# demo = gr.Blocks()
 
 with demo:
     config = gr.State(Config())
@@ -31,6 +31,7 @@ with demo:
             with gr.Column(scale=3):
                 ui_chatbot.chatbot.render()
                 ui_chatbot.user_msg.render()
+
                 with gr.Row():
                     ui_chatbot.user_msg_btn.render()
                     ui_chatbot.stop_btn.render()
@@ -239,30 +240,18 @@ with demo:
         ui_load_model = UiLoadModel()
         ui_load_model.new_llm_model_repo.render()
         ui_load_model.new_llm_model_repo_btn.render()
-        ui_load_model.llm_model_repo.render()
-        ui_load_model.llm_model_file.render()
-        ui_load_model.llm_model_mmproj.render()
-        
         with gr.Group():
             url = 'https://huggingface.co/bartowski'
             gr.Markdown(f'HF GGUF [models]({url})')
+            ui_load_model.llm_model_repo.render()
+            ui_load_model.llm_model_file.render()
+            ui_load_model.llm_model_mmproj.render()
+        with gr.Group():
             with gr.Row(variant='compact'):
                 ui_load_model.n_gpu_layers.render()
                 ui_load_model.n_ctx.render()
             ui_load_model.load_llm_model_btn.render()
         ui_load_model.load_llm_model_log.render()
-
-
-
-        load_llm_model_status = gr.Textbox(
-            # value=None,
-            label='LLM status',
-            # interactive=False,
-            # lines=6,
-        )
-
-
-
         with gr.Group():
             gr.Markdown('Free up disk space by deleting all models except the currently selected one')
             ui_load_model.clear_llm_folder_btn.render()
@@ -321,15 +310,6 @@ with demo:
         )
 
 
-
-        demo.load(
-            fn=lambda: 'model is loaded',
-            inputs=None,
-            outputs=load_llm_model_status,
-        )
-
-
-
     with gr.Tab('Load embed model'):
         ui_load_model.new_embed_model_repo.render()
         ui_load_model.new_embed_model_repo_btn.render()
@@ -374,36 +354,18 @@ with demo:
             outputs=None,
         )
 
-
-
-
-    # demo.load(
-    #     fn=UiFnModel.get_llm_model_info,
-    #     inputs=None,
-    #     # outputs=[ui_load_model.load_llm_model_log],
-    #     # show_progress='minimal',
-    # )
-
-    # demo.load(
-    #     fn=UiFnModel.get_llm_model_info,
-    #     inputs=None,
-    #     outputs=ui_load_model.load_llm_model_log,
-    #     # show_progress='minimal',
-    # ).then(
-    #     fn=UiUpdateComponent.update_system_prompt,
-    #     inputs=None,
-    #     outputs=ui_chatbot.system_prompt,
-    # )
-    # ).then(
-    #     fn=UiFnModel.load_embed_model,
-    #     inputs=config,
-    #     outputs=ui_load_model.load_embed_model_log,
-    # )
-
-    # demo.load(
-    #     fn=UiFnModel.load_embed_model,
-    #     inputs=[config],
-    #     outputs=[ui_load_model.load_embed_model_log],
-    # )
-
-    # demo.unload(UiFnService.cleanup_storage)
+    demo.load(
+        fn=UiFnModel.get_llm_model_info,
+        inputs=None,
+        outputs=[ui_load_model.load_llm_model_log],
+    ).then(
+        fn=UiUpdateComponent.update_system_prompt,
+        inputs=None,
+        outputs=[ui_chatbot.system_prompt],
+    )
+    demo.load(
+        fn=UiFnModel.load_embed_model,
+        inputs=[config],
+        outputs=[ui_load_model.load_embed_model_log],
+    )
+    demo.unload(UiFnService.cleanup_storage)

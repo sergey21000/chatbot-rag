@@ -374,6 +374,7 @@ class UiLoadModel(UiBase):
             label='LLM model loading status',
             interactive=False,
             lines=6,
+            max_lines=6,
             render=False,
         )
         self.clear_llm_folder_btn = gr.Button('Clear folder', render=False)

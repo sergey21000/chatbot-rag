@@ -27,7 +27,7 @@ class UiGradioConfig:
     theme: str | None = None
     fill_height: bool = False
     footer_links: list[str] = ['gradio', 'settings']
-    delete_cache = (86400, 86400)
+    delete_cache: tuple[int, int] | None = None
 
     @classmethod
     def get_demo_launch_kwargs(cls):
@@ -185,7 +185,7 @@ class Config:
         self.Db: DbConfig = DbConfig()
         self.Model: ModelConfig = ModelConfig()
         self.Repos: ReposConfig = ReposConfig()
-        self.CHATBOT_RAG_ENABLED = os.getenv('CHATBOT_RAG_ENABLED', 1)
+        self.CHATBOT_RAG_ENABLED = os.getenv('CHATBOT_RAG_ENABLED', '1').lower() in ('1', 'true')
 
         self.generation_kwargs: dict[str, Any] = dict(
             do_sample=self.Inference.do_sample,
