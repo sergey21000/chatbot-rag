@@ -1,30 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Any
-
-import torch
-from sentence_transformers import SentenceTransformer
 
 import chromadb
-from chromadb import Documents, EmbeddingFunction, Embeddings, QueryResult, Collection
-
-
-class SentenceTransformerEF(EmbeddingFunction):
-    '''Class for receiving embeddings, passed as a function to the `create_collection` method'''
-    def __init__(
-            self,
-            model_name_or_path: str,
-            model_kwargs: dict[str, Any],
-            encode_kwargs: dict[str, Any],
-    ):
-        if not torch.cuda.is_available():
-            model_kwargs['device'] = 'cpu'
-        model_kwargs['model_name_or_path'] = model_name_or_path
-        self.model = SentenceTransformer(**model_kwargs)
-        self.encode_kwargs = encode_kwargs
-
-    def __call__(self, input: Documents) -> Embeddings:
-        embeddings = self.model.encode(input, **self.encode_kwargs)
-        return embeddings.tolist()
+from chromadb import EmbeddingFunction, QueryResult, Collection
 
 
 class DbAbc(ABC):
@@ -64,11 +41,11 @@ class ChromaDb(DbAbc):
             return collection
 
     def create_collection_and_add_texts(
-            self,
-            collection_name: str,
-            texts: list[str],
-            embedding_function: EmbeddingFunction,
-            create_collection_kwargs: dict[str, str | int],
+        self,
+        collection_name: str,
+        texts: list[str],
+        embedding_function: EmbeddingFunction,
+        create_collection_kwargs: dict[str, str | int],
     ) -> None:
         self.delete_collection(collection_name)
         collection = self.client.create_collection(
@@ -84,10 +61,10 @@ class ChromaDb(DbAbc):
 
     @classmethod
     def search_similar_texts(
-            cls,
-            collection: str,
-            query_text: str,
-            query_kwargs: dict,
+        cls,
+        collection: str,
+        query_text: str,
+        query_kwargs: dict,
     ) -> QueryResult:
         n_results = query_kwargs['n_results']
         max_distance_treshold = query_kwargs['max_distance_treshold']
@@ -108,8 +85,8 @@ class ChromaDb(DbAbc):
 
     @staticmethod
     def filter_by_distance(
-            results: QueryResult,
-            max_distance_treshold: float,
+        results: QueryResult,
+        max_distance_treshold: float,
     ) -> dict[str, str | float]:
         filtered_results = {k: [] for k in results}
         for i in range(len(results['ids'][0])):

@@ -1,6 +1,6 @@
 import gradio as gr
 
-from config import Config, UiBlocksConfig
+from config import Config, UiGradioConfig
 from modules.ui_fn import (
     UiFnService,
     UiFnModel,
@@ -17,12 +17,13 @@ from modules.ui_components import (
 
 
 CONF = Config()
-interface = gr.Blocks(**UiBlocksConfig.UI_BLOCKS_KWARGS)
+demo = gr.Blocks(**UiGradioConfig.get_demo_blocks_kwargs())
+# demo = gr.Blocks()
 
-
-with interface:
+with demo:
     config = gr.State(Config())
     texts = gr.State([])
+    gguf_repo_files = gr.State([])
 
     with gr.Tab(label='Chatbot'):
         ui_chatbot = UiChatbot()
@@ -40,7 +41,8 @@ with interface:
                     gr.Markdown('History size')
                     ui_chatbot.history_len.render()
                     with gr.Group():
-                        gr.Markdown('Show LLM thinking')
+                        gr.Markdown('LLM thinking')
+                        ui_chatbot.enable_thinking.render()
                         ui_chatbot.show_thinking.render()
                     with gr.Group():
                         url = 'https://llama-cpp-python.readthedocs.io/en/latest/api-reference/#llama_cpp.Llama.create_chat_completion'
@@ -65,9 +67,9 @@ with interface:
             ),
             inputs=[ui_chatbot.n_results],
             outputs=[ui_chatbot.max_distance_treshold],
-            show_progress=False,
-            show_api=False,
+            show_progress='hidden',
         )
+
         sampling_args = ui_chatbot.get_matching_args(CONF.Inference.sampling_kwargs)
         ui_chatbot.do_sample.input(
             fn=lambda visible: UiUpdateComponent.update_visibility(
@@ -76,9 +78,9 @@ with interface:
             ),
             inputs=[ui_chatbot.do_sample],
             outputs=sampling_args,
-            show_progress=False,
-            show_api=False,
+            show_progress='hidden',
         )
+
         rag_args = ui_chatbot.get_matching_args(CONF.get_rag_kwargs()) + [ui_chatbot.user_msg_with_context]
         ui_chatbot.rag_mode.change(
             fn=lambda visible: UiUpdateComponent.update_visibility(
@@ -87,8 +89,7 @@ with interface:
             ),
             inputs=[ui_chatbot.rag_mode],
             outputs=rag_args,
-            show_api=False,
-            show_progress=False,
+            show_progress='hidden',
         )
 
         with gr.Accordion('Prompt', open=True):
@@ -130,14 +131,12 @@ with interface:
             outputs=None,
             cancels=generate_event,
             queue=False,
-            show_api=False,
         )
         ui_chatbot.clear_btn.click(
             fn=lambda: (None, ''),
             inputs=None,
             outputs=[ui_chatbot.chatbot, ui_chatbot.user_msg_with_context],
             queue=False,
-            show_api=False,
         )
 
 
@@ -146,7 +145,6 @@ with interface:
         with gr.Group():
             gr.Markdown('Uploading files and links')
             with gr.Row(variant='compact'):
-                # загрузка файлов и ссылок
                 with gr.Column(variant='compact'):
                     ui_load_texts.upload_files.render()
                 with gr.Column(variant='compact'):
@@ -156,7 +154,6 @@ with interface:
             url = 'https://docs.unstructured.io/open-source/core-functionality/partitioning#partition'
             gr.Markdown(f'Text loading [parameters]({url})')
             with gr.Row(variant='compact'):
-                # параметры нарезки текста на фрагменты
                 ui_load_texts.chunking_strategy.render()
                 ui_load_texts.max_characters.render()
                 ui_load_texts.new_after_n_chars.render()
@@ -181,14 +178,13 @@ with interface:
             ),
             inputs=[ui_load_texts.clean],
             outputs=clean_args,
-            show_progress=False,
-            show_api=False,
+            show_progress='hidden',
         )
         ui_load_texts.load_texts_btn.render()
         ui_load_texts.load_texts_log.render()
+ 
         load_text_kwargs = ui_load_texts.get_matching_kwargs(CONF.load_text_kwargs)
         load_text_args = list(load_text_kwargs.values())
-
         ui_load_texts.load_texts_btn.click(
             fn=lambda config, *args: UiUpdateComponent.update_kwargs(
                 config_kwargs=config.load_text_kwargs,
@@ -205,7 +201,6 @@ with interface:
             fn=UiUpdateComponent.update_rag_mode_if_db_exists,
             inputs=None,
             outputs=ui_chatbot.rag_mode,
-            show_api=False,
         ).success(
             fn=lambda visible: UiUpdateComponent.update_visibility(
                 visible=visible,
@@ -213,8 +208,7 @@ with interface:
             ),
             inputs=[ui_chatbot.rag_mode],
             outputs=rag_args,
-            show_api=False,
-            show_progress=False,
+            show_progress='hidden',
         )
 
 
@@ -223,6 +217,7 @@ with interface:
         ui_view_texts.max_lines_text_view.render()
         ui_view_texts.view_texts_btn.render()
         ui_view_texts.view_texts_textbox.render()
+
         view_text_kwargs = ui_view_texts.get_matching_kwargs(CONF.view_text_kwargs)
         view_text_args = list(view_text_kwargs.values())
         ui_view_texts.view_texts_btn.click(
@@ -240,15 +235,17 @@ with interface:
         )
 
 
-    with gr.Tab('Load models'):
+    with gr.Tab('Load LLM model'):
         ui_load_model = UiLoadModel()
         ui_load_model.new_llm_model_repo.render()
         ui_load_model.new_llm_model_repo_btn.render()
         ui_load_model.llm_model_repo.render()
         ui_load_model.llm_model_file.render()
+        ui_load_model.llm_model_mmproj.render()
+        
         with gr.Group():
-            url = 'https://llama-cpp-python.readthedocs.io/en/latest/api-reference/#llama_cpp.Llama.__init__'
-            gr.Markdown('Model initialization [parameters]({url})')
+            url = 'https://huggingface.co/bartowski'
+            gr.Markdown(f'HF GGUF [models]({url})')
             with gr.Row(variant='compact'):
                 ui_load_model.n_gpu_layers.render()
                 ui_load_model.n_ctx.render()
@@ -264,17 +261,23 @@ with interface:
             ),
             inputs=[ui_load_model.new_llm_model_repo],
             outputs=[ui_load_model.llm_model_repo, ui_load_model.load_llm_model_log],
-            show_api=False,
         ).success(
             fn=lambda: gr.update(value=''),
             inputs=None,
             outputs=[ui_load_model.new_llm_model_repo],
-            show_api=False,
         )
         ui_load_model.llm_model_repo.input(
-            fn=UiFnModel.get_gguf_model_names,
+            fn=UiFnModel.get_gguf_file_names_from_repo,
             inputs=[ui_load_model.llm_model_repo],
+            outputs=[gguf_repo_files],
+        ).then(
+            fn=UiFnModel.view_gguf_file_names,
+            inputs=[gguf_repo_files],
             outputs=[ui_load_model.llm_model_file],
+        ).then(
+            fn=UiFnModel.view_gguf_mmproj_file_names,
+            inputs=[gguf_repo_files],
+            outputs=[ui_load_model.llm_model_mmproj],
         )
         load_model_kwargs = ui_load_model.get_matching_kwargs(CONF.load_model_kwargs)
         load_model_args = list(load_model_kwargs.values())
@@ -290,17 +293,14 @@ with interface:
             fn=UiFnModel.load_llm_model,
             inputs=[config],
             outputs=[ui_load_model.load_llm_model_log],
-            show_api=False,
         ).then(
             fn=lambda log: log + UiFnService.get_memory_usage(),
             inputs=[ui_load_model.load_llm_model_log],
             outputs=[ui_load_model.load_llm_model_log],
-            show_api=False,
         ).success(
             fn=UiUpdateComponent.update_system_prompt,
-            inputs=[config],
+            inputs=None,
             outputs=[ui_chatbot.system_prompt],
-            show_api=False,
         )
         ui_load_model.clear_llm_folder_btn.click(
             fn=UiFnModel.clear_llm_folder,
@@ -325,17 +325,15 @@ with interface:
             ),
             inputs=[ui_load_model.new_embed_model_repo],
             outputs=[ui_load_model.embed_model_repo, ui_load_model.load_embed_model_log],
-            show_api=False,
         ).success(
             fn=lambda: gr.update(value=''),
             inputs=None,
             outputs=[ui_load_model.new_embed_model_repo],
-            show_api=False,
         )
         ui_load_model.load_embed_model_btn.click(
             fn=lambda config, *args: UiUpdateComponent.update_kwargs(
                 config_kwargs=config.load_model_kwargs,
-                matching_kwargs=load_model_kwargs,
+                matching_kwargs=CONF.load_model_kwargs,
                 args=args,
             ),
             inputs=[config, *load_model_args],
@@ -344,12 +342,10 @@ with interface:
             fn=UiFnModel.load_embed_model,
             inputs=[config],
             outputs=[ui_load_model.load_embed_model_log],
-            show_api=False,
         ).success(
             fn=lambda log: log + UiFnService.get_memory_usage(),
             inputs=[ui_load_model.load_embed_model_log],
             outputs=[ui_load_model.load_embed_model_log],
-            show_api=False,
         )
         ui_load_model.clear_embed_folder_btn.click(
             fn=UiFnModel.clear_embed_folder,
@@ -357,24 +353,33 @@ with interface:
             outputs=None,
         )
 
-    interface.load(
-        fn=lambda: gr.Info('Loading LLM and Embeddings models, the status is displayed on the Load models tabs'),
+    # demo.load(
+    #     fn=UiFnModel.get_llm_model_info,
+    #     inputs=None,
+    #     outputs=[ui_load_model.load_llm_model_log],
+    #     # show_progress='minimal',
+    # )
+
+    demo.load(
+        fn=UiFnModel.get_llm_model_info,
         inputs=None,
-        outputs=None,
-        show_api=False,
+        outputs=ui_load_model.load_llm_model_log,
+        # show_progress='minimal',
     ).then(
-        fn=UiFnModel.load_llm_model,
-        inputs=[config],
-        outputs=[ui_load_model.load_llm_model_log],
-    ).success(
         fn=UiUpdateComponent.update_system_prompt,
-        inputs=[config],
-        outputs=[ui_chatbot.system_prompt],
-        show_api=False,
+        inputs=None,
+        outputs=ui_chatbot.system_prompt,
     )
-    interface.load(
+    # ).then(
+    #     fn=UiFnModel.load_embed_model,
+    #     inputs=config,
+    #     outputs=ui_load_model.load_embed_model_log,
+    # )
+
+    demo.load(
         fn=UiFnModel.load_embed_model,
         inputs=[config],
         outputs=[ui_load_model.load_embed_model_log],
     )
-    interface.unload(UiFnService.cleanup_storage)
+
+    demo.unload(UiFnService.cleanup_storage)

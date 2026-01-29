@@ -1,0 +1,26 @@
+import os
+
+from llama_cpp_py import (
+    LlamaReleaseManager,
+    LlamaSyncServer,
+    LlamaSyncClient,
+)
+
+
+tag = os.getenv('LLAMACPP_RELEASE_TAG', 'latest')
+release_zip_url = os.getenv('LLAMACPP_RELEASE_ZIP_URL')
+llamacpp_dir = os.getenv('LLAMACPP_DIR')
+openai_base_url = os.getenv('OPENAI_BASE_URL')
+
+if openai_base_url:
+    llama_server = None
+    llm_client = LlamaSyncClient(openai_base_url=openai_base_url)
+else:
+    if llamacpp_dir:
+        release_manager=LlamaReleaseManager(llama_dir=llamacpp_dir)
+    elif release_zip_url:
+        release_manager=LlamaReleaseManager(release_zip_url=release_zip_url)
+    else:
+        release_manager=LlamaReleaseManager(tag=tag)
+    llama_server = LlamaSyncServer(verbose=True, release_manager=release_manager)
+    llm_client = LlamaSyncClient(openai_base_url=llama_server.server_url)

@@ -6,3 +6,6 @@ youtube-transcript-api==1.2.3
 psutil==7.2.1
 pytest==9.0.2
 python-dotenv==1.2.1
+pillow==12.1.0
+loguru==0.7.3
+git+https://github.com/sergey21000/llama-cpp-py.git

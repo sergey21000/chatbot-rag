@@ -26,11 +26,8 @@ class UiUpdateComponent:
 
 
     @staticmethod
-    def update_system_prompt(config: Config, request: gr.Request) -> dict:
-        llm_model = ModelStorage.LLM_MODEL.get(request.session_hash)
-        if llm_model is None:
-            return gr.update(value=f'LLM model not initialized', interactive=False)
-        support_system_role = UiFnModel.check_support_system_role(llm_model)
+    def update_system_prompt() -> dict:
+        support_system_role = UiFnModel.check_support_system_role()
         if support_system_role:
             value = ''
         else:
@@ -62,7 +59,10 @@ class UiUpdateComponent:
 
 
     @staticmethod
-    def update_kwargs(config_kwargs: dict, matching_kwargs: dict | list, args: tuple[Any]) -> None:
+    def update_kwargs(
+        config_kwargs: dict,
+        matching_kwargs: dict | list, args: tuple[Any],
+    ) -> None:
         kwargs = dict(zip(matching_kwargs, args))
         config_kwargs.update(kwargs)
 
@@ -82,9 +82,19 @@ class UiChatbot(UiBase):
         self.chatbot = gr.Chatbot(
             sanitize_html=False,
             render=False,
-            # height=400,  # 480
+            # buttons=['copy', 'copy_all', 'share'],
+            # height=480,
+            # api_visibility='public',  # 'private'
         )
-        self.user_msg = gr.Textbox(label='User', render=False)
+        self.user_msg = gr.MultimodalTextbox(
+            interactive=True,
+            file_count='single',
+            placeholder='Введите сообщение или прикрепите файл',
+            show_label=False,
+            sources=['upload'],  # ['upload', 'microphone']
+            render=False,
+        )
+        
         self.user_msg_btn = gr.Button('Send', render=False)
         self.stop_btn = gr.Button('Stop', render=False)
         self.clear_btn = gr.Button('Clear', render=False)
@@ -183,9 +193,16 @@ class UiChatbot(UiBase):
             visible=False,
             render=False,
         )
+        self.enable_thinking = gr.Checkbox(
+            value=False,
+            label='Enable thinking',
+            show_label=False,
+            visible=True,
+            render=False,
+        )
         self.show_thinking = gr.Checkbox(
             value=False,
-            label='Show LLM thinking',
+            label='Show thinking',
             show_label=False,
             visible=True,
             render=False,
@@ -344,6 +361,13 @@ class UiLoadModel(UiBase):
             allow_custom_value=True,
             render=False,
         )
+        self.llm_model_mmproj = gr.Dropdown(
+            choices=None,
+            value=None,
+            label='MMPROJ model file',
+            allow_custom_value=True,
+            render=False,
+        )
         self.load_llm_model_btn = gr.Button('Loading and initializing LLM model', render=False)
         self.load_llm_model_log = gr.Textbox(
             value=None,
@@ -363,7 +387,7 @@ class UiLoadModel(UiBase):
         self.n_ctx = gr.Number(
             value=CONF.load_model_kwargs['n_ctx'],
             label='n_ctx',
-            info='Text context, 0 = from model',
+            info='Model context size, 0 = from model',
             show_label=True,
             render=False,
         )
@@ -388,5 +412,4 @@ class UiLoadModel(UiBase):
             lines=7,
             render=False,
         )
-
         self.clear_embed_folder_btn = gr.Button('Clear folder', render=False)

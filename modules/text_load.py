@@ -17,9 +17,9 @@ class YouTubeSubLoader:
     '''YouTube subtitle downloader'''
     @staticmethod
     def get_subtitle_text_from_yt_video(
-            yt_video_url: str,
-            subtitle_lang: str,
-        ) -> tuple[str | None, str]:
+        yt_video_url: str,
+        subtitle_lang: str,
+    ) -> tuple[str | None, str]:
         """
         Returns text subtitles (manual or automatic) as a string.
         If there are no subtitles, returns None.
@@ -83,9 +83,9 @@ class TextLoader:
 
     @classmethod
     def load_texts_from_files(
-            cls,
-            upload_files: list[str],
-            config: Config,
+        cls,
+        upload_files: list[str],
+        config: Config,
     ) -> tuple[list[str], str]:
         load_log = ''
         texts = []
@@ -106,9 +106,9 @@ class TextLoader:
 
     @classmethod
     def load_texts_from_urls(
-            cls,
-            urls: str,
-            config: Config,
+        cls,
+        urls: str,
+        config: Config,
     ) -> tuple[list[str], str]:
         load_log = ''
         texts = []
@@ -143,10 +143,10 @@ class TextLoader:
 
     @classmethod
     def load_texts_from_files_and_urls(
-            cls,
-            upload_files: list[str] | None,
-            urls: str | None,
-            config: Config,
+        cls,
+        upload_files: list[str] | None,
+        urls: str | None,
+        config: Config,
     ) -> tuple[list[str], str]:
         load_log = ''
         all_texts = []
