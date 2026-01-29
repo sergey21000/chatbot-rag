@@ -294,7 +294,7 @@ with demo:
             inputs=[config],
             outputs=[ui_load_model.load_llm_model_log],
         ).then(
-            fn=lambda log: log + UiFnService.get_memory_usage(),
+            fn=lambda log: log + '\n' + UiFnService.get_memory_usage(),
             inputs=[ui_load_model.load_llm_model_log],
             outputs=[ui_load_model.load_llm_model_log],
         ).success(

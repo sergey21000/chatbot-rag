@@ -348,7 +348,7 @@ class UiFnChat:
         if user_message['text'] is not None:
             user_msg['content'].append(dict(text=user_message['text'], type='text'))
         chatbot.append(user_msg)
-        logger.debug(f'"chatbot" in output "user_message_to_chatbot": {pprint.pformat(chatbot)}')
+        logger.debug(f'"chatbot" in output "user_message_to_chatbot":\n{pprint.pformat(chatbot)}')
         return gr.update(value=None), chatbot
 
 
@@ -360,7 +360,7 @@ class UiFnChat:
     ) -> None:
         if not config.CHATBOT_RAG_ENABLED:
             return
-        logger.debug(f'"chatbot" in input "update_user_msg_with_context": {pprint.pformat(chatbot)}')
+        logger.debug(f'"chatbot" in input "update_user_msg_with_context":\n{pprint.pformat(chatbot)}')
         config.generation_kwargs['user_msg_with_context'] = ''
         user_message = chatbot[-1]['content'][-1]['text']
         if not config.generation_kwargs['rag_mode'] or not user_message.strip():
@@ -485,7 +485,7 @@ class UiFnChat:
         config: Config,
         request: gr.Request,
     ) -> Iterator[CHAT_HISTORY]:
-        logger.debug(f'"chatbot" in input "yield_chatbot_with_llm_response": {pprint.pformat(chatbot)}')
+        logger.debug(f'"chatbot" in input "yield_chatbot_with_llm_response":\n{pprint.pformat(chatbot)}')
         user_message = chatbot[-1]['content'][-1]['text']
         if not user_message.strip():
             yield chatbot[:-1]
@@ -533,9 +533,9 @@ class UiFnChat:
             image_path_or_base64=image_path,
             resize_size=config.Inference.resize_size,
         )
-        logger.debug(f'"messages" before "llm_client.stream" {pprint.pformat(messages)}')
-        logger.debug(f'"completions_kwargs" before "llm_client.stream" {pprint.pformat(completions_kwargs)}')
-        logger.debug(f'"config.generation_kwargs" before "llm_client.stream" {pprint.pformat(config.generation_kwargs)}')
+        logger.debug(f'"messages" before "llm_client.stream":\n{pprint.pformat(messages)}')
+        logger.debug(f'"completions_kwargs" before "llm_client.stream":\n{pprint.pformat(completions_kwargs)}')
+        logger.debug(f'"config.generation_kwargs" before "llm_client.stream:\n" {pprint.pformat(config.generation_kwargs)}')
         generator = llm_client.stream(
             user_message_or_messages=messages,
             completions_kwargs=completions_kwargs,
