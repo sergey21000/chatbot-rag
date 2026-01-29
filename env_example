@@ -108,7 +108,7 @@ LLAMACPP_SERVER_TIMEOUT_WAIT=900
 
 # прямая ссылка на релиз llama.cpp
 # https://github.com/ggml-org/llama.cpp/releases
-LLAMACPP_RELEASE_ZIP_URL=https://github.com/ggml-org/llama.cpp/releases/download/b7806/llama-b7806-bin-win-cuda-13.1-x64.zip
+# LLAMACPP_RELEASE_ZIP_URL=https://github.com/ggml-org/llama.cpp/releases/download/b7806/llama-b7806-bin-win-cuda-13.1-x64.zip
 
 # установка тега для llama.cpp вручную
 # LLAMACPP_RELEASE_TAG=b7806

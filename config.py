@@ -226,16 +226,13 @@ class Config:
         )
 
     def update_env(self, **kwargs) -> None:
-        LLAMA_ARG_HF_FILE=self.load_model_kwargs['llm_model_file']
         LLAMA_ARG_MMPROJ=self.load_model_kwargs['llm_model_mmproj']
-
         dict_to_updating = dict(
             LLAMA_ARG_CTX_SIZE=str(self.load_model_kwargs['n_ctx']),
             LLAMA_ARG_N_GPU_LAYERS=str(self.load_model_kwargs['n_gpu_layers']),
         )
         for k, v in kwargs.items():
             dict_to_updating[k] = str(v)
-        
         os.environ.pop('LLAMA_ARG_MODEL_URL', None)
         os.environ.pop('LLAMA_ARG_MMPROJ_URL', None)
         os.environ.pop('LLAMA_ARG_HF_REPO', None)
