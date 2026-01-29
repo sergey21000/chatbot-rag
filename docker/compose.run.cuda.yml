@@ -4,10 +4,4 @@ services:
       file: compose.base.yml
       service: gradio-app
     image: ghcr.io/sergey21000/chatbot-rag:main-cuda
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+    gpus: all
