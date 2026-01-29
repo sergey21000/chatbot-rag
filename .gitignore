@@ -2,7 +2,7 @@
 other/
 llm_models/
 embed_models/
-
+gradio_temp/
 *.ipynb
 
 # Byte-compiled / optimized / DLL files

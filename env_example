@@ -25,7 +25,7 @@ GRADIO_SERVER_PORT=7860
 # LLAMA_ARG_MODEL_URL=https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/main/Qwen_Qwen3-0.6B-Q4_K_M.gguf
 
 # вариант 2
-# LLAMA_ARG_MODEL=D:/models/Qwen_Qwen3-0.6B-Q4_K_M.gguf
+♥ LLAMA_ARG_MODEL=llm_models/bartowski_google_gemma-3-1b-it-GGUF_google_gemma-3-1b-it-Q8_0.gguf
 
 # вариант 3
 # LLAMA_ARG_HF_REPO=bartowski/Qwen_Qwen3-0.6B-GGUF:q4_k_m
@@ -97,7 +97,7 @@ LLAMA_ARG_HOST=127.0.0.1
 # ==============================================================
 
 # модель эмбедингов
-EMBED_MODEL_REPO=sergeyzh/rubert-tiny-turbo
+EMBED_MODEL_REPO=Alibaba-NLP/gte-multilingual-base
 
 # включить или отключить режим RAG
 CHATBOT_RAG_ENABLED=1
@@ -118,5 +118,5 @@ LLAMACPP_SERVER_TIMEOUT_WAIT=900
 # прямая ссылка на llm модель вместо llama.cpp если таковая используется  
 OPENAI_BASE_URL=""
 
-# уровень логгирования
-CHATBOT_LOG_LEVEL=DEBUG
+# установить уровень логгирования для отладки
+# CHATBOT_LOG_LEVEL=DEBUG

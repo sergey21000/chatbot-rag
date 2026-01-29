@@ -130,7 +130,7 @@ class UiFnModel:
                     return load_log
         if model_path.is_file():
             load_log += f'Model {model_file} already loaded, initialization\n'
-            progress(0.7, desc='Step 2/2: Initialize the model')
+            progress(0.7, desc='Step 2/2: Initialize the model (restart llama.cpp server)')
             config.update_env(**kwargs_to_update_env)
             try:
                 llama_server.stop()
@@ -168,6 +168,8 @@ class UiFnModel:
             if embedding_function is not None:
                 ModelStorage.EMBED_MODEL[request.session_hash] = embedding_function
                 load_log += f'Embeddings model {model_repo} initialized\n'
+            else:
+                load_log += f'Embeddings model {model_repo} is not initialized (NoneType)\n'
         except Exception as ex:
             load_log += f'Error initializing Embedding model: {ex}\n'
         return load_log
@@ -549,6 +551,8 @@ class UiFnChat:
                 chatbot[-1]['content'] += token
                 yield chatbot
         except Exception as ex:
-            gr.Info(f'Error generating LLM response: {ex}')
+            msg = f'Error generating LLM response: {ex}'
+            gr.Info(msg)
+            logger.error(msg)
             yield chatbot[:-2]
             return

@@ -1,4 +1,5 @@
 import gradio as gr
+from loguru import logger
 
 from config import Config, UiGradioConfig
 from modules.ui_fn import (
@@ -18,7 +19,6 @@ from modules.ui_components import (
 
 CONF = Config()
 demo = gr.Blocks(**UiGradioConfig.get_demo_blocks_kwargs())
-# demo = gr.Blocks()
 
 with demo:
     config = gr.State(Config())
@@ -83,12 +83,13 @@ with demo:
         )
 
         rag_args = ui_chatbot.get_matching_args(CONF.get_rag_kwargs()) + [ui_chatbot.user_msg_with_context]
+        logger.debug(f'num rag_args: {len(rag_args)}, rag_args: {rag_args}')
         ui_chatbot.rag_mode.change(
             fn=lambda visible: UiUpdateComponent.update_visibility(
                 visible=visible,
                 num_componets=len(rag_args),
             ),
-            inputs=[ui_chatbot.rag_mode],
+            inputs=ui_chatbot.rag_mode,
             outputs=rag_args,
             show_progress='hidden',
         )
@@ -100,6 +101,10 @@ with demo:
 
         generation_kwargs = ui_chatbot.get_matching_kwargs(CONF.generation_kwargs)
         generation_args = list(generation_kwargs.values())
+        logger.debug(
+            f'num generation_kwargs: {len(generation_kwargs)}, '
+            f'generation_kwargs keys: {generation_kwargs.keys()}'
+        )
         generate_event = gr.on(
             triggers=[ui_chatbot.user_msg.submit, ui_chatbot.user_msg_btn.click],
             fn=UiFnChat.user_message_to_chatbot,
@@ -163,7 +168,6 @@ with demo:
             url = 'https://docs.unstructured.io/open-source/core-functionality/cleaning#clean'
             gr.Markdown(f'Text cleaning [parameters]({url})')
             with gr.Row(variant='compact'):
-                # параметры очистки текста
                 ui_load_texts.clean.render()
                 ui_load_texts.bullets.render()
                 ui_load_texts.extra_whitespace.render()
@@ -172,6 +176,7 @@ with demo:
                 ui_load_texts.lowercase.render()
 
         clean_args = ui_load_texts.get_matching_args(CONF.get_clean_kwargs())
+        logger.debug(f'num clean_args: {len(clean_args)}, clean_args: {clean_args}')
         ui_load_texts.clean.change(
             fn=lambda visible: UiUpdateComponent.update_visibility(
                 visible=visible,
@@ -186,6 +191,10 @@ with demo:
  
         load_text_kwargs = ui_load_texts.get_matching_kwargs(CONF.load_text_kwargs)
         load_text_args = list(load_text_kwargs.values())
+        logger.debug(
+            f'num load_text_kwargs: {len(load_text_kwargs)}, '
+            f'load_text_kwargs keys: {load_text_kwargs.keys()}'
+        )
         ui_load_texts.load_texts_btn.click(
             fn=lambda config, *args: UiUpdateComponent.update_kwargs(
                 config_kwargs=config.load_text_kwargs,
@@ -201,7 +210,7 @@ with demo:
         ).success(
             fn=UiUpdateComponent.update_rag_mode_if_db_exists,
             inputs=None,
-            outputs=ui_chatbot.rag_mode,
+            outputs=[ui_chatbot.rag_mode],
         ).success(
             fn=lambda visible: UiUpdateComponent.update_visibility(
                 visible=visible,
@@ -238,8 +247,9 @@ with demo:
 
     with gr.Tab('Load LLM model'):
         ui_load_model = UiLoadModel()
-        ui_load_model.new_llm_model_repo.render()
-        ui_load_model.new_llm_model_repo_btn.render()
+        with gr.Group():
+            ui_load_model.new_llm_model_repo.render()
+            ui_load_model.new_llm_model_repo_btn.render()
         with gr.Group():
             url = 'https://huggingface.co/bartowski'
             gr.Markdown(f'HF GGUF [models]({url})')
@@ -282,6 +292,10 @@ with demo:
         )
         load_model_kwargs = ui_load_model.get_matching_kwargs(CONF.load_model_kwargs)
         load_model_args = list(load_model_kwargs.values())
+        logger.debug(
+            f'num load_model_kwargs: {len(load_model_kwargs)}, '
+            f'load_model_kwargs keys: {load_model_kwargs.keys()}'
+        )
         ui_load_model.load_llm_model_btn.click(
             fn=lambda config, *args: UiUpdateComponent.update_kwargs(
                 config_kwargs=config.load_model_kwargs,
@@ -353,7 +367,7 @@ with demo:
             inputs=[ui_load_model.embed_model_repo],
             outputs=None,
         )
-
+    
     demo.load(
         fn=UiFnModel.get_llm_model_info,
         inputs=None,

@@ -2,11 +2,10 @@ from typing import Iterator
 
 import pytest
 import gradio as gr
-import torch
-from llama_cpp import Llama
 from chromadb import EmbeddingFunction
 
 from config import Config, ModelStorage
+from modules.llm import llama_server, llm_client
 from modules.db import ChromaDb
 from modules.ui_fn import (
     UiFnModel,
@@ -15,9 +14,10 @@ from modules.ui_fn import (
 )
 
 
-CHAT_HISTORY = list[gr.ChatMessage | dict[str, str | gr.Component]]
+CHAT_HISTORY = list[gr.ChatMessage | dict[str, str | list | gr.Component]]
 CONF = Config()
 CONF.generation_kwargs['rag_mode'] = True
+CONF.CHATBOT_RAG_ENABLED = True
 
 
 class FakeRequest:
@@ -25,7 +25,7 @@ class FakeRequest:
 
 
 @pytest.fixture  # (scope='function', autouse=True)
-def llm_model():
+def llm_client_and_server():
     load_log: str = UiFnModel.load_llm_model(
         config=CONF,
         request=FakeRequest,
@@ -33,7 +33,8 @@ def llm_model():
     model: Llama = ModelStorage.LLM_MODEL.get(FakeRequest.session_hash)
     print(f'LLM Loading logs: {load_log}')
     assert isinstance(model, Llama), 'LLM model failed to load'
-    return model
+    # return model
+    return llama_server, llm_client
 
 
 @pytest.fixture

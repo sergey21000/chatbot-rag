@@ -1,7 +1,8 @@
 from typing import Any
 import gradio as gr
+from loguru import logger
 
-from config import Config, ModelStorage
+from config import Config
 from modules.db import ChromaDb
 from modules.ui_fn import UiFnModel
 
@@ -15,6 +16,7 @@ class UiUpdateComponent:
     def update_visibility(visible: bool, num_componets: int)  -> dict | list[dict]:
         if num_componets == 1:
             return gr.update(visible=visible)
+        logger.debug(f'num conponents to update: {num_componets}, visible: {visible}')
         return [gr.update(visible=visible) for _ in range(num_componets)]
 
 
@@ -53,6 +55,7 @@ class UiUpdateComponent:
     def update_rag_mode_if_db_exists(request: gr.Request) -> dict:
         db = ChromaDb()
         exists = db.collection_exists(collection_name=request.session_hash)
+        logger.debug(f'is collection exists: {exists}')
         if not exists:
             return gr.update(value=False, visible=False)
         return gr.update(value=True, visible=True)
@@ -164,7 +167,7 @@ class UiChatbot(UiBase):
             render=False,
         )
         self.n_results = gr.Radio(
-            choices=[1, 2, 3, 4, 5, 'max', 'all'],  # заменить на слайдер
+            choices=[1, 2, 3, 4, 5, 'max', 'all'],  # ToDo: replace with Slider
             value=CONF.generation_kwargs['n_results'],
             label='Number of relevant texts for vector search',
             visible=self.rag_mode.value,

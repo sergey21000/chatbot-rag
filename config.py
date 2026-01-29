@@ -5,9 +5,6 @@ from typing import Any, ClassVar
 
 from chromadb import EmbeddingFunction
 
-from dotenv import load_dotenv
-load_dotenv()
-
 
 class ModelStorage:
     '''Global model storage'''
@@ -49,7 +46,7 @@ class InferenceConfig:
     '''Model inference settings'''
     def __init__(self):
         self.encode_kwargs: dict[str, Any] = dict(
-            batch_size=1,
+            batch_size=300,
             normalize_embeddings=None,
         )
         self.reasoning_format = 'none'
@@ -117,9 +114,7 @@ class PromptConfig:
 {context}
 
 Вопрос:
-{user_message}
-
-Ответ:'''
+{user_message}'''
 
 
 class ModelConfig:

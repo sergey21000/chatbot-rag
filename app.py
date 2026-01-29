@@ -20,7 +20,6 @@ if __name__ == '__main__':
             f'{pprint.pformat(llm_client.get_props())}'
         ))
         demo.launch(**UiGradioConfig.get_demo_launch_kwargs())
-        demo.close()
-        demo.launch()
     finally:
         llama_server.stop()
+        demo.close()
