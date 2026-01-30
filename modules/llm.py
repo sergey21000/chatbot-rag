@@ -1,5 +1,6 @@
 import os
 
+from loguru import logger
 from llama_cpp_py import (
     LlamaReleaseManager,
     LlamaSyncServer,
@@ -24,3 +25,7 @@ else:
         release_manager=LlamaReleaseManager(tag=tag)
     llama_server = LlamaSyncServer(verbose=True, release_manager=release_manager)
     llm_client = LlamaSyncClient(openai_base_url=llama_server.server_url)
+
+logger.debug(f'llm_client initialized, server_url: {llm_client.openai_base_url}')
+if llama_server:
+    logger.debug(f'llama_server initialized, llama_dir: {llama_server.llama_dir}')

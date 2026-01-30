@@ -1,6 +1,5 @@
 
 
----
 # RAG Chatbot with Gradio and llama.cpp
 
 <div align="left">
@@ -21,7 +20,6 @@
 <a href="https://github.com/sergey21000/chatbot-rag/tree/main/screenshots">Скриншоты</a> интерфейса приложения
 
 
----
 ## 📋 Содержание
 
 - 🚀 [Функционал](#-Функционал)
@@ -33,7 +31,6 @@
 - 🐋 [Установка и запуск через Docker Compose](#-установка-и-запуск-через-docker-compose)
 
 
----
 ## 🚀 Функционал
 
 ### 🧠 Функционал LLM
@@ -66,7 +63,7 @@
 ## 🛠 Стек
 
 - [python](https://www.python.org/) >= 3.10
-- [llama-cpp-python](https://github.com/abetlen/llama-cpp-python) для инференса моделей в формате GGUF
+- [llama-cpp-py](https://github.com/abetlen/llama-cpp-python) python обертка для запуска [llama.cpp](https://github.com/ggml-org/llama.cpp) сервера
 - [gradio](https://github.com/gradio-app/gradio) для написания веб-интерфейса
 - [unstructured](https://github.com/Unstructured-IO/unstructured) для загрузки текстовых файлов, разделения текстов на фрагменты 
 - [chromadb](https://github.com/chroma-core/chroma) для векторного хранилища 

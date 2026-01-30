@@ -1,4 +1,5 @@
 import gradio as gr
+from loguru import logger
 from requests.exceptions import MissingSchema
 
 from youtube_transcript_api import YouTubeTranscriptApi, NoTranscriptFound, TranscriptsDisabled
@@ -96,7 +97,9 @@ class TextLoader:
                     loaded_texts = cls.load_texts(file_or_url=upload_file, config=config)
                     texts.extend(loaded_texts)
                 except Exception as ex:
-                    load_log += f'Error loading text from file {upload_file}: {ex}\n'
+                    msg = f'Error loading text from file {upload_file}: {ex}\n'
+                    load_log += msg
+                    logger.error(msg)
                     continue
             else:
                 load_log += f'Unsupported file format {upload_file}\n'
