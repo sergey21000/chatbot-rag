@@ -81,7 +81,7 @@ LLAMA_CACHE=llm_models
 # llama.cpp сервер и порт
 
 LLAMA_ARG_PORT=8081
-LLAMA_ARG_HOST=127.0.0.1
+LLAMA_ARG_HOST=0.0.0.0
 
 
 # ==============================================================
