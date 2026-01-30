@@ -39,7 +39,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: docker/Dockerfile-cpu
+          file: docker/cpu.Dockerfile
           push: true
           pull: true
           platforms: linux/amd64
@@ -52,7 +52,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: docker/Dockerfile-cuda-nvidia  # or Dockerfile-cuda-pytorch
+          file: docker/cuda.Dockerfile
           push: true
           pull: true
           platforms: linux/amd64

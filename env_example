@@ -99,9 +99,6 @@ LLAMA_ARG_HOST=127.0.0.1
 # модель эмбедингов
 EMBED_MODEL_REPO=Alibaba-NLP/gte-multilingual-base
 
-# включить или отключить режим RAG
-CHATBOT_RAG_ENABLED=1
-
 # увеличение ожидания запуска сервера llama.cpp
 LLAMACPP_SERVER_TIMEOUT_WAIT=900
 
@@ -116,7 +113,10 @@ LLAMACPP_SERVER_TIMEOUT_WAIT=900
 # LLAMACPP_DIR=""
 
 # прямая ссылка на llm модель вместо llama.cpp если таковая используется  
-OPENAI_BASE_URL=""
+# OPENAI_BASE_URL=""
+
+# включить или отключить режим RAG
+CHATBOT_RAG_ENABLED=1
 
 # установить уровень логгирования для отладки
 # CHATBOT_LOG_LEVEL=DEBUG

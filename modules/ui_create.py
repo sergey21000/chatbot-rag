@@ -1,3 +1,5 @@
+import os
+
 import gradio as gr
 from loguru import logger
 
@@ -19,6 +21,7 @@ from modules.ui_components import (
 
 CONF = Config()
 demo = gr.Blocks(**UiGradioConfig.get_demo_blocks_kwargs())
+RUNNING_IN_DOCKER = os.getenv('RUNNING_IN_DOCKER', '0').lower() in ('1', 'true')
 
 with demo:
     config = gr.State(Config())
@@ -245,7 +248,7 @@ with demo:
         )
 
 
-    with gr.Tab('Load LLM model'):
+    with gr.Tab('LLM model'):
         ui_load_model = UiLoadModel()
         with gr.Group():
             ui_load_model.new_llm_model_repo.render()
@@ -324,7 +327,7 @@ with demo:
         )
 
 
-    with gr.Tab('Load embed model'):
+    with gr.Tab('Embed model'):
         ui_load_model.new_embed_model_repo.render()
         ui_load_model.new_embed_model_repo_btn.render()
         ui_load_model.embed_model_repo.render()
@@ -368,18 +371,29 @@ with demo:
             outputs=None,
         )
     
-    demo.load(
-        fn=UiFnModel.get_llm_model_info,
-        inputs=None,
-        outputs=[ui_load_model.load_llm_model_log],
-    ).then(
-        fn=UiUpdateComponent.update_system_prompt,
-        inputs=None,
-        outputs=[ui_chatbot.system_prompt],
-    )
-    demo.load(
-        fn=UiFnModel.load_embed_model,
-        inputs=[config],
-        outputs=[ui_load_model.load_embed_model_log],
-    )
+    if not RUNNING_IN_DOCKER:
+        demo.load(
+            fn=UiFnModel.get_llm_model_info,
+            inputs=None,
+            outputs=[ui_load_model.load_llm_model_log],
+        ).then(
+            fn=UiUpdateComponent.update_system_prompt,
+            inputs=None,
+            outputs=[ui_chatbot.system_prompt],
+        )
+        demo.load(
+            fn=UiFnModel.load_embed_model,
+            inputs=[config],
+            outputs=[ui_load_model.load_embed_model_log],
+        )
+    else:
+        demo.load(
+            fn=UiFnModel.load_embed_model,
+            inputs=[config],
+            outputs=[ui_load_model.load_embed_model_log],
+        ).success(
+            fn=lambda log: log + '\n\n' + UiFnModel.get_llm_model_info,
+            inputs=[ui_load_model.load_embed_model_log],
+            outputs=[ui_load_model.load_embed_model_log],
+        )
     demo.unload(UiFnService.cleanup_storage)

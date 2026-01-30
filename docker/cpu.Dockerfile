@@ -1,0 +1,18 @@
+FROM python:3.12 AS builder
+
+COPY requirements/requirements-base.txt requirements/requirements-cpu.txt .
+RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements-cpu.txt
+
+
+FROM python:3.12-slim
+
+COPY --from=builder /wheels /wheels
+RUN pip install --no-cache-dir /wheels/* && rm -rf /wheels
+
+WORKDIR /app
+COPY modules modules
+COPY app.py config.py .
+
+ENV GRADIO_SERVER_NAME=0.0.0.0
+EXPOSE 7860
+CMD ["python3", "app.py"]

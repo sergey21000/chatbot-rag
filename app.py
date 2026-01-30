@@ -1,3 +1,4 @@
+import os
 import pprint
 from dotenv import load_dotenv
 load_dotenv()
@@ -13,13 +14,16 @@ from config import UiGradioConfig
 
 
 if __name__ == '__main__':
+    RUNNING_IN_DOCKER = os.getenv('RUNNING_IN_DOCKER', '0').lower() in ('1', 'true')
     try:
-        llama_server.start()
-        logger.debug((
-            'llama.cpp server started, props: '
-            f'{pprint.pformat(llm_client.get_props())}'
-        ))
+        if not RUNNING_IN_DOCKER:
+            llama_server.start()
+            logger.debug((
+                'llama.cpp server started, props: '
+                f'{pprint.pformat(llm_client.get_props())}'
+            ))
         demo.launch(**UiGradioConfig.get_demo_launch_kwargs())
     finally:
-        llama_server.stop()
+        if not RUNNING_IN_DOCKER:
+            llama_server.stop()
         demo.close()

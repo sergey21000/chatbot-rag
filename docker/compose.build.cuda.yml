@@ -1,16 +1,10 @@
 services:
-  gradio-app:
+  app:
     extends:
       file: compose.base.yml
-      service: gradio-app
+      service: app
     build:
       context: ..
-      dockerfile: Dockerfile-cuda-nvidia  # or Dockerfile-cuda-pytorch
-    image: chatbot-rag:cuda
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+      dockerfile: cuda.Dockerfile
+    image: local/chatbot-rag:main-cuda
+    gpus: all

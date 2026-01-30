@@ -1,9 +1,9 @@
 services:
-  gradio-app:
+  app:
     extends:
       file: compose.base.yml
-      service: gradio-app
+      service: app
     build:
       context: ..
-      dockerfile: Dockerfile-cpu
-    image: chatbot-rag:cpu
+      dockerfile: cpu.Dockerfile
+    image: local/chatbot-rag:main-cpu
