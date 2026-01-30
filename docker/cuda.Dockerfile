@@ -18,7 +18,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 COPY --from=builder /wheels /wheels
-RUN pip install --no-cache-dir /wheels/* && rm -rf /wheels
+RUN pip install --no-cache-dir --break-system-packages /wheels/* && rm -rf /wheels
 
 WORKDIR /app
 COPY modules modules
