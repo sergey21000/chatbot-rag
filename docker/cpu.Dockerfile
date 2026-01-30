@@ -6,7 +6,7 @@ RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements-cpu.txt
 
 FROM python:3.12-slim
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
 	libmagic-dev \
 	poppler-utils \
 	libgl1 libglib2.0-0 \

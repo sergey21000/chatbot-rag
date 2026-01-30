@@ -8,7 +8,7 @@ RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements-base.txt
 
 FROM pytorch/pytorch:2.10.0-cuda13.0-cudnn9-runtime
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
 	libmagic-dev \
 	poppler-utils \
 	libgl1 libglib2.0-0 \
