@@ -10,7 +10,7 @@ services:
       - ../config.py:/app/config.py
     environment:
       - RUNNING_IN_DOCKER=True
-      - OPENAI_BASE_URL=http://llamacpp:${LLAMA_ARG_PORT:-8080}
+      - OPENAI_BASE_URL=http://llamacpp:8080
     env_file:
       - path: ../.env
         required: true
@@ -24,9 +24,13 @@ services:
     container_name: llamacpp
     restart: unless-stopped
     ports:
-      - ${LLAMA_ARG_PORT:-8080}:${LLAMA_ARG_PORT:-8080}
+      - 8080:8080
     volumes:
-      - ${LLAMA_CACHE:-../llm_models}/llamacpp:/root/.cache/llama.cpp
+      - ${LLAMA_CACHE:-../llm_models}:/root/.cache/llama.cpp
+    environment:
+      - LLAMA_ARG_PORT=8080
+      - LLAMA_ARG_HOST=0.0.0.0
+      - LLAMA_CACHE=/root/.cache/llama.cpp
     env_file:
       - path: ../.env
         required: true

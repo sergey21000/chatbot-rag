@@ -392,7 +392,7 @@ with demo:
             inputs=[config],
             outputs=[ui_load_model.load_embed_model_log],
         ).success(
-            fn=lambda log: log + '\n\n' + UiFnModel.get_llm_model_info,
+            fn=lambda log: log + '\n\n' + UiFnModel.get_llm_model_info(),
             inputs=[ui_load_model.load_embed_model_log],
             outputs=[ui_load_model.load_embed_model_log],
         )
