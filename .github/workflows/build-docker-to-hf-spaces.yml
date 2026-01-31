@@ -1,4 +1,4 @@
-name: Build and Push Docker (CPU & CUDA)
+name: Build and Push Docker to HF Spaces
 
 on:
   workflow_dispatch:
