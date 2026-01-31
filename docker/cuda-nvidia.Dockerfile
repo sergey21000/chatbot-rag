@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/cuda:13.0.2-cudnn-devel-ubuntu24.04
+FROM nvcr.io/nvidia/cuda:13.0.2-cudnn-devel-ubuntu24.04 AS builder
 
 # RUN apt-get update && apt-get install -y git && apt-get clean && rm -rf /var/lib/apt/lists/*
 
