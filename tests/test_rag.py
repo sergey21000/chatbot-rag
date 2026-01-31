@@ -35,11 +35,11 @@ def test_load_llm_model(fake_request):
 
 @pytest.mark.order(2)
 def test_llm_server():
-    from modules.llm import llm_server, llm_client
+    from modules.llm import llama_server, llm_client
 
-    llm_server.start()
+    llama_server.start()
     assert llm_client.check_health(), 'llm_client.check_health() failed'
-    llm_server.stop()
+    llama_server.stop()
 
 
 @pytest.mark.order(3)
