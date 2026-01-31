@@ -190,12 +190,12 @@ cp env.example .env
 
 *Запуск с поддержкой CPU*
 ```sh
-docker-compose -f docker/compose.cpu.yml up
+docker compose -f docker/compose.cpu.yml up
 ```
 
 *Запуск с поддержкой CUDA*
 ```sh
-docker-compose -f docker/compose.cuda.yml up
+docker compose -f docker/compose.cuda.yml up
 ```
 
 Веб-интерфейс сервера доступен по адресу  
@@ -206,12 +206,12 @@ http://127.0.0.1:7860/
 
 *Запуск с поддержкой CPU*
 ```sh
-docker-compose -f docker/compose.build.cpu.yml up
+docker compose -f docker/compose.build.cpu.yml up
 ```
 
 *Запуск с поддержкой CUDA*
 ```sh
-docker-compose -f docker/compose.build.cuda.yml up
+docker compose -f docker/compose.build.cuda.yml up
 ```
 При первом запуске будет произведена сборка образа на основе `docker/cpu.Dockerfile` или `docker/cuda.Dockerfile`
 
@@ -230,5 +230,5 @@ export COMPOSE_FILE=docker/compose.cpu.yml
 $env:COMPOSE_FILE="docker/compose.cpu.yml"
 
 # запуск короткой командой
-docker-compose up
+docker compose up
 ```
