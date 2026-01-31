@@ -26,17 +26,6 @@ ENV PATH=/opt/llama.cpp/build/bin:$PATH
 ENV LD_LIBRARY_PATH=/opt/llama.cpp/build/bin:$LD_LIBRARY_PATH
 ENV LLAMACPP_DIR=/opt/llama.cpp/build/bin
 
-RUN useradd -m -u 1000 user \
-    && chown -R user:user /opt/llama.cpp
-
-USER user
-ENV HOME=/home/user \
-    PATH=/home/user/.local/bin:$PATH \
-    RUN_IN_DOCHER=0
-
 WORKDIR /app
-
-COPY --chown=user hf-spaces-deploy/config.py  .
-COPY --chown=user hf-spaces-deploy/env.example .env
 
 CMD ["python3", "app.py"]
