@@ -1,4 +1,4 @@
-name: Deploy to HuggingFace Spaces
+name: Deploy to HF Spaces
 
 on:
   workflow_dispatch:
