@@ -7,44 +7,49 @@ permissions:
 
 env:
   PYTHONUTF8: 1
-  LLM_MODEL_REPO: bartowski/Qwen_Qwen3-0.6B-GGUF
-  LLM_MODEL_FILE: Qwen_Qwen3-0.6B-Q4_K_M.gguf
+  LLAMA_ARG_HF_REPO: bartowski/Qwen_Qwen3-0.6B-GGUF
+  LLAMA_ARG_HF_FILE: Qwen_Qwen3-0.6B-Q4_K_M.gguf
   EMBED_MODEL_REPO: sergeyzh/rubert-tiny-turbo
 
-  LLM_MODELS_PATH: models
-  EMBED_MODELS_PATH: embed_models
+  LLM_MODEL_DIR: llm_models
+  EMBED_MODEL_DIR: embed_models
 
 jobs:
   download-models:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
 
       - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-          
+        run: |
+          uv python install 3.12
+          uv venv
+
       - name: Install huggingface-hub
-        run: pip install huggingface-hub[hf_xet]
+        run: uv pip install huggingface-hub[hf_xet]
           
       - name: Download models
         run: |
-          hf download ${{ env.LLM_MODEL_REPO }} ${{ env.LLM_MODEL_FILE }} \
-          --local-dir ${{ env.LLM_MODELS_PATH }}
+          uv run hf download ${{ env.LLAMA_ARG_HF_REPO }} ${{ env.LLAMA_ARG_HF_FILE }} \
+          --local-dir ${{ env.LLM_MODEL_DIR }}
           # convert dir name to "models--Alibaba-NLP--gte-multilingual-base"
           EMBED_FOLDER=$(echo "${{ env.EMBED_MODEL_REPO }}" | sed 's/\//--/g')
-          hf download ${{ env.EMBED_MODEL_REPO }} \
-          --local-dir ${{ env.EMBED_MODELS_PATH }}/models--$EMBED_FOLDER
+          uv run hf download ${{ env.EMBED_MODEL_REPO }} \
+          --local-dir ${{ env.EMBED_MODEL_DIR }}/models--$EMBED_FOLDER
 
       - name: Upload model artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: model
           path: |
-            ${{ env.LLM_MODELS_PATH }}
-            ${{ env.EMBED_MODELS_PATH }}
+            ${{ env.LLM_MODEL_DIR }}
+            ${{ env.EMBED_MODEL_DIR }}
           overwrite: true
 
   test-linux:
@@ -53,20 +58,13 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        python-version: ["3.11", "3.12"]
+        python-version: ["3.12"]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-          cache-dependency-path: 'requirements/requirements-cpu.txt'
+        uses: actions/checkout@v6
 
       - name: Download model artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: model
           path: .
@@ -74,18 +72,28 @@ jobs:
       - name: Check model exists
         run: |
           echo "LLM models:"
-          ls -lh ${{ env.LLM_MODELS_PATH }}
+          ls -lh ${{ env.LLM_MODEL_DIR }}
           echo "Embed models:"
-          ls -lh ${{ env.EMBED_MODELS_PATH }}
+          ls -lh ${{ env.EMBED_MODEL_DIR }}
+      
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: |
+          uv python install ${{ matrix.python-version }}
+          uv venv
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements/requirements-cpu.txt
+          uv pip install --upgrade pip
+          uv pip install -r requirements/requirements-cpu.txt --index-strategy unsafe-best-match
 
       - name: Test with pytest
         run: |
-          python -m pytest -vs
+          uv run pytest -vs
 
   test-windows:
     needs: download-models
@@ -93,20 +101,13 @@ jobs:
     timeout-minutes: 60
     strategy:
       matrix:
-        python-version: ["3.11", "3.12"]
+        python-version: ["3.12"]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: 'pip'
-          cache-dependency-path: 'requirements/requirements-cpu.txt'
+        uses: actions/checkout@v6
 
       - name: Download model artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: model
           path: .
@@ -114,19 +115,29 @@ jobs:
       - name: Check model exists
         run: |
           echo "LLM models:"
-          dir ${{ env.LLM_MODELS_PATH }}
+          dir ${{ env.LLM_MODEL_DIR }}
           echo "Embed models:"
-          dir ${{ env.EMBED_MODELS_PATH }}
+          dir ${{ env.EMBED_MODEL_DIR }}
+
+      - name: Set up Python
+        run: |
+          uv python install ${{ matrix.python-version }}
+          uv venv
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements/requirements-cpu.txt
+          uv pip install --upgrade pip
+          uv pip install -r requirements/requirements-cpu.txt --index-strategy unsafe-best-match
+
+      - name: Install dependencies
+        run: |
+          uv pip install --upgrade pip
+          uv pip install -r requirements/requirements-cpu.txt --index-strategy unsafe-best-match
           # fix for unstructured dependence
-          pip uninstall -y python-magic || true
-          python -m pip install python-magic-bin
+          uv pip uninstall -y python-magic || true
+          uv pip install python-magic-bin
 
       - name: Test with pytest
         run: |
-          python -m pytest -vs
+          uv run pytest -vs
 
