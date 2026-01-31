@@ -9,6 +9,7 @@ RUN pip wheel --no-cache-dir --wheel-dir /wheels -r requirements-cuda.txt
 FROM nvcr.io/nvidia/cuda:13.0.2-cudnn-runtime-ubuntu24.04
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
+	python3 python3-pip \
 	libmagic-dev \
 	poppler-utils \
 	libgl1 libglib2.0-0 \
