@@ -1,6 +1,8 @@
 name: Build and Push Docker (CPU & CUDA)
 
-
+on:
+  workflow_dispatch:
+  
 permissions:
   contents: write
   packages: write
