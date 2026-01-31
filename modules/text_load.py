@@ -172,6 +172,4 @@ class TextLoader:
             load_log += 'RAG mode cannot be activated'
             return all_texts, load_log
         load_log += f'Number of loaded text chunks: {len(all_texts)}\n'
-
         return all_texts, load_log
-

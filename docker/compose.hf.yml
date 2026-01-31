@@ -1,0 +1,16 @@
+services:
+  app:
+    image: ghcr.io/sergey21000/chatbot-rag:main-hf
+    container_name: app
+    restart: unless-stopped
+    ports:
+      - ${GRADIO_SERVER_PORT:-7860}:7860
+    volumes:
+      - ../embed_models:/app/embed_models
+      - ../config.py:/app/config.py
+    environment:
+      - GRADIO_SERVER_PORT=7860
+      - GRADIO_SERVER_NAME=0.0.0.0
+    env_file:
+      - path: ../.env
+        required: true

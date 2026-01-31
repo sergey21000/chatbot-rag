@@ -28,10 +28,11 @@ class ChromaDb(DbAbc):
         if self.collection_exists(collection_name):
             self.client.delete_collection(name=collection_name)
 
+
     def get_collection(
-            self,
-            collection_name: str,
-            embedding_function: EmbeddingFunction,
+        self,
+        collection_name: str,
+        embedding_function: EmbeddingFunction,
     ) -> Collection | None:
         if self.collection_exists(collection_name):
             collection = self.client.get_collection(
@@ -39,6 +40,7 @@ class ChromaDb(DbAbc):
                 embedding_function=embedding_function,
             )
             return collection
+
 
     def create_collection_and_add_texts(
         self,
@@ -58,6 +60,7 @@ class ChromaDb(DbAbc):
             ids=ids,
             documents=texts,
         )
+
 
     @classmethod
     def search_similar_texts(
@@ -82,6 +85,7 @@ class ChromaDb(DbAbc):
             max_distance_treshold=max_distance_treshold,
         )
         return filtered_results
+
 
     @staticmethod
     def filter_by_distance(

@@ -329,7 +329,9 @@ class UiFnDb:
             )
             load_log += 'DB is initialized, RAG mode is activated and can be activated in the Chatbot tab'
         except Exception as ex:
-            load_log += f'Error creating database: {ex}'
+            msg = f'Error creating database: {ex}'
+            load_log += msg
+            logger.exception(msg)
         return texts, load_log
 
 
@@ -554,6 +556,6 @@ class UiFnChat:
         except Exception as ex:
             msg = f'Error generating LLM response: {ex}'
             gr.Info(msg)
-            logger.error(msg)
+            logger.exception(msg)
             yield chatbot[:-2]
             return
