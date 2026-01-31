@@ -167,7 +167,7 @@ class UiFnModel:
             )
             if embedding_function is not None:
                 ModelStorage.EMBED_MODEL[request.session_hash] = embedding_function
-                load_log += f'Embeddings model {model_repo} initialized\n'
+                load_log += f'Embeddings model has been initialized: {model_repo}\n'
             else:
                 load_log += f'Embeddings model {model_repo} is not initialized (NoneType)\n'
         except Exception as ex:
@@ -284,7 +284,7 @@ class UiFnModel:
         props = llm_client.get_props()
         if props:
             model_info = (
-                f'Initialized model: {props.get('model_alias')}\n'
+                f'LLM model initialized: {props.get('model_alias')}\n'
                 f'Available modalities: {props.get('modalities')}\n\n'
                 f'Information from the /props method of llama.cpp (except chat_template):\n'
             )
