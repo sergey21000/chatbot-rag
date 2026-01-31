@@ -1,4 +1,4 @@
-name: Build and Push Docker to HF Spaces
+name: Build Docker to HF Spaces
 
 on:
   workflow_dispatch:
