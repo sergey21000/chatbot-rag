@@ -19,7 +19,28 @@ def test_db_creation(db):
     print(f"DB Load logs: {db['db_load_log']}")
 
 
-def test_rag_pipeline(db, conf, fake_request):
+def test_load_llm_model(fake_request):
+    from modules.ui_fn import UiFnModel
+
+    CONF = Config()
+    CONF.load_model_kwargs['llm_model_repo'] = 'bartowski/Qwen_Qwen3-0.6B-GGUF'
+    CONF.load_model_kwargs['llm_model_file'] = 'Qwen_Qwen3-0.6B-Q4_K_M.gguf'
+    load_log: str = UiFnModel.load_llm_model(
+        config=CONF,
+        request=fake_request,
+    )
+    print(f'LLM Loading logs: {load_log}')
+
+
+def test_llm_server(test_load_llm_model):
+    from modules.llm import llm_server, llm_client
+
+    llm_server.start()
+    assert llm_client.check_health(), 'llm_client.check_health() failed'
+    llm_server.stop()
+
+
+def test_rag_pipeline(db, conf, fake_request, test_llm_server):
     from modules.ui_fn import UiFnChat
 
     if db['collection'] is None:
@@ -54,19 +75,7 @@ def test_rag_pipeline(db, conf, fake_request):
     )
     for result_chatbot in stream_chatbot:
         pass
+    assert chatbot, "yield_chatbot_with_llm_response() didn't respond"
     assistant_message: str = result_chatbot[-1].get('content', '')
-    assert len(assistant_message) > 0, 'LLM did not respond'
+    assert len(assistant_message) > 0, 'Empty assistant_message'
     print(f'Chatbot response: {assistant_message}')
-
-
-def test_load_llm_model(fake_request):
-    from modules.ui_fn import UiFnModel
-
-    CONF = Config()
-    CONF.load_model_kwargs['llm_model_repo'] = 'bartowski/Qwen_Qwen3-0.6B-GGUF'
-    CONF.load_model_kwargs['llm_model_file'] = 'Qwen_Qwen3-0.6B-Q4_K_M.gguf'
-    load_log: str = UiFnModel.load_llm_model(
-        config=CONF,
-        request=fake_request,
-    )
-    print(f'LLM Loading logs: {load_log}')

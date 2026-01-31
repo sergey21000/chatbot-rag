@@ -492,9 +492,10 @@ class UiFnChat:
         if not user_message.strip():
             yield chatbot[:-1]
             return
-        props = llm_client.get_props()
-        if not props:
-            gr.Info('LLM model not initialized')
+        if not llm_client.check_health():
+            msg = 'llm_client.check_health() failed'
+            gr.Info(msg)
+            logger.debug(msg)
             yield chatbot[:-1]
             return
         completions_kwargs = config.get_completions_kwargs()
