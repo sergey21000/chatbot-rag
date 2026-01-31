@@ -1,14 +1,14 @@
 services:
   app:
     extends:
-      file: ../docker/compose.yml
+      file: ../docker/compose.cpu.yml
       service: app
     image: ghcr.io/sergey21000/chatbot-rag:main-cuda
     gpus: all
 
   llamacpp:
     extends:
-      file: ../docker/compose.yml
+      file: ../docker/compose.cpu.yml
       service: llamacpp
     image: ghcr.io/ggml-org/llama.cpp:server-cuda
     gpus: all

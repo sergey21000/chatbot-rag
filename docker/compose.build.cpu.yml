@@ -1,9 +1,14 @@
 services:
   app:
     extends:
-      file: compose.base.yml
+      file: ../docker/compose.cpu.yml
       service: app
     build:
       context: ..
       dockerfile: cpu.Dockerfile
     image: local/chatbot-rag:main-cpu
+
+  llamacpp:
+    extends:
+      file: ../docker/compose.cpu.yml
+      service: llamacpp

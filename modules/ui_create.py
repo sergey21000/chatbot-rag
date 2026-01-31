@@ -248,7 +248,7 @@ with demo:
         )
 
 
-    with gr.Tab('LLM model'):
+    with gr.Tab('LLM model', render=False) as llm_tab:
         ui_load_model = UiLoadModel()
         with gr.Group():
             ui_load_model.new_llm_model_repo.render()
@@ -326,6 +326,8 @@ with demo:
             outputs=None,
         )
 
+    if not RUNNING_IN_DOCKER:
+        llm_tab.render()
 
     with gr.Tab('Embed model'):
         ui_load_model.new_embed_model_repo.render()
