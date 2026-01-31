@@ -19,6 +19,7 @@ def test_db_creation(db):
     print(f"DB Load logs: {db['db_load_log']}")
 
 
+@pytest.mark.order(1)
 def test_load_llm_model(fake_request):
     from modules.ui_fn import UiFnModel
 
@@ -32,7 +33,8 @@ def test_load_llm_model(fake_request):
     print(f'LLM Loading logs: {load_log}')
 
 
-def test_llm_server(test_load_llm_model):
+@pytest.mark.order(2)
+def test_llm_server():
     from modules.llm import llm_server, llm_client
 
     llm_server.start()
@@ -40,7 +42,8 @@ def test_llm_server(test_load_llm_model):
     llm_server.stop()
 
 
-def test_rag_pipeline(db, conf, fake_request, test_llm_server):
+@pytest.mark.order(3)
+def test_rag_pipeline(db, conf, fake_request):
     from modules.ui_fn import UiFnChat
 
     if db['collection'] is None:
