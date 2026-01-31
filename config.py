@@ -308,5 +308,3 @@ class Config:
             n_results=self.generation_kwargs['n_results'],
             max_distance_treshold=self.generation_kwargs['max_distance_treshold'],
         )
-
-
