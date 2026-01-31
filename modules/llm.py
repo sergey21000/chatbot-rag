@@ -18,12 +18,13 @@ if openai_base_url:
     llm_client = LlamaSyncClient(openai_base_url=openai_base_url)
 else:
     if llamacpp_dir:
-        release_manager=LlamaReleaseManager(llama_dir=llamacpp_dir)
+        llama_server = LlamaSyncServer(verbose=True, llama_dir=llamacpp_dir)
     elif release_zip_url:
-        release_manager=LlamaReleaseManager(release_zip_url=release_zip_url)
+        release_manager = LlamaReleaseManager(release_zip_url=release_zip_url)
+        llama_server = LlamaSyncServer(verbose=True, release_manager=release_manager)
     else:
-        release_manager=LlamaReleaseManager(tag=tag)
-    llama_server = LlamaSyncServer(verbose=True, release_manager=release_manager)
+        release_manager = LlamaReleaseManager(tag=tag)
+        llama_server = LlamaSyncServer(verbose=True, release_manager=release_manager)
     llm_client = LlamaSyncClient(openai_base_url=llama_server.server_url)
 
 logger.debug(f'llm_client initialized, server_url: {llm_client.openai_base_url}')
