@@ -58,7 +58,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: docker/cuda.Dockerfile
+          file: cuda-nvidia.Dockerfile  # cuda-pytorch.Dockerfile
           push: true
           pull: true
           platforms: linux/amd64
