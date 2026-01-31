@@ -5,9 +5,7 @@ RUN useradd -m -u 1000 user \
 	&& chown -R user:user /app
 
 USER user
-ENV HOME=/home/user \
-    PATH=/home/user/.local/bin:$PATH \
-    RUN_IN_DOCKER=0
+ENV RUN_IN_DOCKER=0
 
 WORKDIR /app
 

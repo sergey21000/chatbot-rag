@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 import chromadb
 from chromadb import EmbeddingFunction, QueryResult, Collection
+from loguru import logger
 
 
 class DbAbc(ABC):
@@ -56,6 +57,11 @@ class ChromaDb(DbAbc):
             **create_collection_kwargs,
         )
         ids = list(map(str, range(len(texts))))
+        logger.debug(
+            f'num texts before collection.add(): {len(texts)}, '
+            f'ids[:5]: {ids[:5]}, ids[-5:]: {ids[-5:]}, '
+            f'texts[0]: {texts[0]}, texts[-1]: {texts[-1]}'
+        )
         collection.add(
             ids=ids,
             documents=texts,
