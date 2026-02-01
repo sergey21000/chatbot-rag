@@ -21,9 +21,11 @@ class ChromaDb(DbAbc):
         settings = chromadb.config.Settings(anonymized_telemetry=False, allow_reset=True)
         self.client = chromadb.EphemeralClient(settings=settings)
 
+
     def collection_exists(self, collection_name: str) -> bool:
         collections = [collection.name for collection in self.client.list_collections()]
         return collection_name in collections
+
 
     def delete_collection(self, collection_name: str) -> None:
         if self.collection_exists(collection_name):
