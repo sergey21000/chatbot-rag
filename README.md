@@ -80,7 +80,7 @@
 ```sh
 git clone https://github.com/sergey21000/chatbot-rag.git
 cd chatbot-rag
-cp env.example .env
+cp .env.example .env
 ```
 В файле `.env` настраиваются параметры чат-бота, параметры `Gradio`, модель и параметры `llama.cpp`, модель эмбеддингов
 
@@ -130,7 +130,7 @@ uv run pytest -vs
 ```sh
 git clone https://github.com/sergey21000/chatbot-rag.git
 cd chatbot-rag
-cp env.example .env
+cp .env.example .env
 ```
 Выбор модели, параметры `llama.cpp`, `Gradio` и чат-бота устанавливаются в файле `.env`
 
@@ -183,7 +183,7 @@ pytest -vs
 ```sh
 git clone https://github.com/sergey21000/chatbot-rag.git
 cd chatbot-rag
-cp env.example .env
+cp .env.example .env
 ```
 
 **2) Запуск Compose из готового образа**
