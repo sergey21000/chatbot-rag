@@ -92,12 +92,11 @@ class UiChatbot(UiBase):
         self.user_msg = gr.MultimodalTextbox(
             interactive=True,
             file_count='single',
-            placeholder='Введите сообщение или прикрепите файл',
+            placeholder='Enter a message or attach a file',
             show_label=False,
             sources=['upload'],  # ['upload', 'microphone']
             render=False,
         )
-        
         self.user_msg_btn = gr.Button('Send', render=False)
         self.stop_btn = gr.Button('Stop', render=False)
         self.clear_btn = gr.Button('Clear', render=False)

@@ -25,7 +25,7 @@ from modules.text_load import TextLoader
 from modules.llm import llm_client, llama_server
 
 
-CHAT_HISTORY = list[gr.ChatMessage | dict[str, str | list | gr.Component]]
+CHAT_HISTORY = list[dict[str, str | list]]
 CONF = Config()
 
 
@@ -400,21 +400,22 @@ class UiFnChat:
 
 
     @classmethod
-    def create_completion_message_from_image(
+    def _create_completion_message_from_image(
         cls,
         image_path_or_base64: str | Path,
         resize_size: int | None,
         text: str = '',
-    ) -> dict:
+    ) -> dict | None:
         image_base64 = cls._prepare_image(
             image=image_path_or_base64,
             resize_size=resize_size,
         )
-        message = dict(role='user', content=[
-            dict(type='image_url', image_url=dict(url=f'data:image/png;base64,{image_base64}')),
-            dict(type='text', text=text),
-        ])
-        return message
+        if image_base64:
+            message = dict(role='user', content=[
+                dict(type='image_url', image_url=dict(url=f'data:image/png;base64,{image_base64}')),
+                dict(type='text', text=text),
+            ])
+            return message
 
 
     @classmethod
@@ -435,24 +436,27 @@ class UiFnChat:
             messages.extend(chatbot[:-1][-(history_len*2):])
             for i in range(len(messages)):
                 if messages[i]['role'] == 'user':
+                    new_text_message = dict(role='user', content=[dict(
+                        type='text', text=messages[i]['content'][-1]['text'],
+                    )])
                     first_message_content = messages[i]['content'][0]
                     if isinstance(first_message_content, dict) and first_message_content.get('file'):
-                        if UiFnModel.check_multimodal_support():
-                            new_message = cls.create_completion_message_from_image(
+                        if not llm_client.check_multimodal_support():
+                            new_message = new_text_message
+                        else:
+                            new_message = cls._create_completion_message_from_image(
                                 text=messages[i]['content'][-1]['text'],
                                 image_path_or_base64=first_message_content['file']['path'],
                                 resize_size=resize_size,
                             )
-                        else:
-                            new_message = dict(role='user', content=[dict(
-                                type='text', text=messages[i]['content'][-1]['text'],
-                            )])
+                            if not new_message:
+                                new_message = new_text_message
                     messages[i] = new_message
         if not image_path_or_base64:
             messages.append(dict(role='user', content=user_message))
             return messages
         if image_path_or_base64:
-            message = cls.create_completion_message_from_image(
+            message = cls._create_completion_message_from_image(
                 text=user_message,
                 image_path_or_base64=image_path_or_base64,
                 resize_size=resize_size,

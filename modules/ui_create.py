@@ -49,8 +49,7 @@ with demo:
                         ui_chatbot.enable_thinking.render()
                         ui_chatbot.show_thinking.render()
                     with gr.Group():
-                        url = 'https://llama-cpp-python.readthedocs.io/en/latest/api-reference/#llama_cpp.Llama.create_chat_completion'
-                        gr.Markdown('Generation [parameters]({url})')
+                        gr.Markdown('Generation parameters')
                         ui_chatbot.do_sample.render()
                         ui_chatbot.temperature.render()
                         ui_chatbot.top_p.render()
