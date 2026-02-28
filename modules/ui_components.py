@@ -64,7 +64,8 @@ class UiUpdateComponent:
     @staticmethod
     def update_kwargs(
         config_kwargs: dict,
-        matching_kwargs: dict | list, args: tuple[Any],
+        matching_kwargs: dict | list,
+        args: tuple[Any],
     ) -> None:
         kwargs = dict(zip(matching_kwargs, args))
         config_kwargs.update(kwargs)
