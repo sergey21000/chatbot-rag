@@ -130,10 +130,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          uv pip install -r requirements/requirements-cpu.txt --index-strategy unsafe-best-match
-
-      - name: Install dependencies
-        run: |
           uv pip install --upgrade pip
           uv pip install -r requirements/requirements-cpu.txt --index-strategy unsafe-best-match
           # fix for unstructured dependence
@@ -143,4 +139,3 @@ jobs:
       - name: Test with pytest
         run: |
           uv run pytest -vs
-

@@ -59,7 +59,6 @@ class UiFnService:
         memory_for_printing = f'---------------\n{memory_for_printing}---------------'
         return memory_for_printing
 
-
     @staticmethod
     def clear_memory() -> None:
         gc.collect()
@@ -95,7 +94,6 @@ class UiFnModel:
                 completed_size += size
                 desc = f'Loading GGUF file, {completed_size/1024**3:.3f}/{total_size/1024**3:.3f} GB'
                 progress_gradio(completed_size/total_size, desc=desc)
-
 
     @classmethod
     def load_llm_model(cls, config: Config, request: gr.Request) -> str:
@@ -146,7 +144,6 @@ class UiFnModel:
             load_log += f'Model {model_path} not is file\n'
         return load_log
 
-
     @staticmethod
     def load_embed_model(config: Config, request: gr.Request) -> str:
         if not config.CHATBOT_RAG_ENABLED:
@@ -174,7 +171,6 @@ class UiFnModel:
             load_log += f'Error initializing Embedding model: {ex}\n'
         return load_log
 
-
     @staticmethod
     def add_new_model_repo(new_model_repo: str, model_repos: list[str]) -> tuple[dict, str]:
         if not new_model_repo.strip():
@@ -197,7 +193,6 @@ class UiFnModel:
         update_dropdown = gr.update(choices=model_repos, value=None)
         return update_dropdown, load_log
 
-
     @staticmethod
     def get_gguf_file_names_from_repo(model_repo: str) -> list[Path]:
         if not model_repo:
@@ -205,7 +200,6 @@ class UiFnModel:
         repo_files = list(list_repo_tree(model_repo))
         gguf_repo_files = [file for file in repo_files if file.path.endswith('.gguf')]
         return gguf_repo_files
-
 
     @staticmethod
     def view_gguf_file_names(gguf_repo_files: list[RepoFile]) -> dict:
@@ -221,7 +215,6 @@ class UiFnModel:
             value=model_paths_values[0],
         )
 
-
     @staticmethod
     def view_gguf_mmproj_file_names(gguf_repo_files: list[RepoFile]) -> dict:
         if not gguf_repo_files:
@@ -232,7 +225,6 @@ class UiFnModel:
             choices=model_paths,
             value=model_paths[0],
         )
-
 
     @staticmethod
     def clear_llm_folder(except_gguf_filename: str | None) -> None:
@@ -248,7 +240,6 @@ class UiFnModel:
                 path.unlink(missing_ok=True)
                 gr.Info(f'All files removed from directory {CONF.Model.LLM_MODEL_DIR} except {except_gguf_filename}')
 
-
     @staticmethod
     def clear_embed_folder(except_model_repo: str) -> None:
         if except_model_repo is None:
@@ -262,7 +253,6 @@ class UiFnModel:
                 rmtree(path, ignore_errors=True)
                 gr.Info(f'All directories have been removed from the {CONF.Model.EMBED_MODEL_DIR} directory except {model_folder_name}')
 
-
     @staticmethod
     def check_multimodal_support() -> bool:
         props = llm_client.get_props()
@@ -270,14 +260,12 @@ class UiFnModel:
             return props.get('modalities', {}).get('vision', False)
         return False
 
-
     @staticmethod
     def check_support_system_role() -> bool:
         props = llm_client.get_props()
         if props:
             return 'System role not supported' not in props.get('chat_template', '')
         return True
-
 
     @staticmethod
     def get_llm_model_info() -> str:
@@ -355,7 +343,6 @@ class UiFnChat:
         logger.debug(f'"chatbot" in output "user_message_to_chatbot":\n{pprint.pformat(chatbot)}')
         return gr.update(value=None), chatbot
 
-
     @staticmethod
     def update_user_msg_with_context(
         chatbot: CHAT_HISTORY,
@@ -398,7 +385,6 @@ class UiFnChat:
             )
             config.generation_kwargs['user_msg_with_context'] = user_msg_with_context
 
-
     @classmethod
     def _create_completion_message_from_image(
         cls,
@@ -416,7 +402,6 @@ class UiFnChat:
                 dict(type='text', text=text),
             ])
             return message
-
 
     @classmethod
     def _prepare_messages_for_gradio_chatbot(
@@ -466,7 +451,6 @@ class UiFnChat:
             messages.append(dict(role='user', content=user_message))
         return messages
 
-
     @classmethod
     def _prepare_image(cls, image: str | Path, resize_size: int | None) -> str:
         if isinstance(image, (str, Path)):
@@ -484,7 +468,6 @@ class UiFnChat:
                     f'Image format {image_path.suffix} is not supported. ' 
                     f'Expected one of: {cls.image_extension}'
                 )
-
 
     @classmethod
     def yield_chatbot_with_llm_response(

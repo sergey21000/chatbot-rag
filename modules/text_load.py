@@ -61,7 +61,6 @@ class TextLoader:
             texts.append(str(el) + '\n')
         return texts
 
-
     @classmethod
     def load_texts(cls, file_or_url: str, config: Config, is_url: bool = False) -> list[str]:
         partition_kwargs_key = 'filename' if not is_url else 'url'
@@ -69,7 +68,6 @@ class TextLoader:
         elements = partition(**partition_kwargs)
         texts = cls.elements_to_texts(elements)
         return texts
-
 
     @classmethod
     def chunking_text(cls, text: str, config: Config):
@@ -80,7 +78,6 @@ class TextLoader:
         chunks = chunk_elements(elements=elements, **config.get_chunking_kwargs())
         texts = cls.elements_to_texts(chunks)
         return texts
-
 
     @classmethod
     def load_texts_from_files(
@@ -105,7 +102,6 @@ class TextLoader:
                 load_log += f'Unsupported file format {upload_file}\n'
                 continue
         return texts, load_log
-
 
     @classmethod
     def load_texts_from_urls(
@@ -142,7 +138,6 @@ class TextLoader:
             except Exception as ex:
                 load_log += f'Error loading data by web loader at url: {url}: {ex}\n'
         return texts, load_log
-
 
     @classmethod
     def load_texts_from_files_and_urls(

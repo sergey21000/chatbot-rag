@@ -19,13 +19,11 @@ class UiUpdateComponent:
         logger.debug(f'num conponents to update: {num_componets}, visible: {visible}')
         return [gr.update(visible=visible) for _ in range(num_componets)]
 
-
     @staticmethod
     def view_user_msg_with_context(config: Config) -> dict:
         text = config.generation_kwargs['user_msg_with_context']
         visible = config.generation_kwargs['rag_mode']
         return gr.update(value=text, visible=visible)
-
 
     @staticmethod
     def update_system_prompt() -> dict:
@@ -35,7 +33,6 @@ class UiUpdateComponent:
         else:
             value = 'System prompt is not supported by this model'
         return gr.update(value=value, interactive=support_system_role)
-
 
     @staticmethod
     def view_texts(texts: list[str], max_lines: int) -> dict:
@@ -50,7 +47,6 @@ class UiUpdateComponent:
         text = f'Всего строк текста: {num_lines}\n{text}'
         return gr.update(value=text) 
 
-
     @staticmethod
     def update_rag_mode_if_db_exists(request: gr.Request) -> dict:
         db = ChromaDb()
@@ -59,7 +55,6 @@ class UiUpdateComponent:
         if not exists:
             return gr.update(value=False, visible=False)
         return gr.update(value=True, visible=True)
-
 
     @staticmethod
     def update_kwargs(
