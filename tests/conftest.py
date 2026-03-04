@@ -12,7 +12,7 @@ CHAT_HISTORY = list[gr.ChatMessage | dict[str, str | list | gr.Component]]
 @pytest.fixture(scope='session', autouse=True)
 def load_test_env() -> None:
     from dotenv import load_dotenv
-    load_dotenv(dotenv_path='tests/env.tests')
+    load_dotenv(dotenv_path='tests/.test.env')
 
 
 @pytest.fixture(scope='session')
